@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_text_styles.dart';
 
-class UserScreen extends StatelessWidget {
-  const UserScreen({super.key});
+class UserProfileScreen extends StatelessWidget {
+  const UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

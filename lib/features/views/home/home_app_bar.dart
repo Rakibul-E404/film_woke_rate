@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -8,7 +10,7 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   State<HomeAppBar> createState() => _HomeAppBarState();
 
   @override
-  Size get preferredSize => const Size.fromHeight(90);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
@@ -29,9 +31,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
           children: [
             // Tap outside to dismiss
             GestureDetector(
-              onTap: () => Navigator.of(context).pop(),
-              behavior: HitTestBehavior.opaque,
-              child: const SizedBox.expand(),
+              onTap: () => Get.back(),
+              // behavior: HitTestBehavior.opaque,
+              // // child: const SizedBox.expand(),
             ),
             Positioned(
               top: offset.dy,
@@ -47,7 +49,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 90,
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
@@ -77,9 +78,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
   }
 }
 
-// ─────────────────────────────────────────────
-//  Dropdown Menu Widget
-// ─────────────────────────────────────────────
+/// ─────────────────────────────────────────────
+///  Dropdown Menu Widget
+/// ─────────────────────────────────────────────
 class _ProfileDropdownMenu extends StatelessWidget {
   const _ProfileDropdownMenu();
 
@@ -271,9 +272,9 @@ class _ProfileDropdownMenu extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-//  Custom star+thumb icon for "Ratings"
-// ─────────────────────────────────────────────
+/// ─────────────────────────────────────────────
+///  Custom star+thumb icon for "Ratings"
+/// ─────────────────────────────────────────────
 class _StarThumbIcon extends StatelessWidget {
   const _StarThumbIcon();
 
@@ -300,9 +301,9 @@ class _StarThumbIcon extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
-//  Small upward-pointing arrow painter
-// ─────────────────────────────────────────────
+/// ─────────────────────────────────────────────
+///  Small upward-pointing arrow painter
+/// ─────────────────────────────────────────────
 class _ArrowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
