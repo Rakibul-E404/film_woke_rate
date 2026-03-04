@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:woke_movie_rating/features/utils/app_colors.dart';
+
+import '../../widgets/home_widget/dropdown_arrow.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -97,7 +100,7 @@ class _ProfileDropdownMenu extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20),
             child: CustomPaint(
               size: const Size(20, 10),
-              painter: _ArrowPainter(),
+              painter: ArrowPainter(),
             ),
           ),
 
@@ -169,7 +172,7 @@ class _ProfileDropdownMenu extends StatelessWidget {
                   ),
                   _divider(),
                   _menuItem(
-                    iconWidget: const _StarThumbIcon(),
+                    iconWidget: SvgPicture.asset("assets/icons/rate_fill.svg",color: AppColors.whiteColor,),
                     label: 'Ratings',
                     onTap: () => _onTap(context, 'Ratings'),
                   ),
@@ -235,9 +238,12 @@ class _ProfileDropdownMenu extends StatelessWidget {
     );
   }
 
+
   Widget _menuItem({
     IconData? icon,
     Widget? iconWidget,
+    String? svgPath,  // New parameter for SVG path
+    double svgSize = 20,  // Optional SVG size parameter
     required String label,
     required VoidCallback onTap,
   }) {
@@ -253,7 +259,17 @@ class _ProfileDropdownMenu extends StatelessWidget {
               width: 22,
               height: 22,
               child: iconWidget ??
-                  Icon(icon, color: Colors.white, size: 20),
+                  (svgPath != null
+                      ? SvgPicture.asset(
+                    svgPath,
+                    width: svgSize,
+                    height: svgSize,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  )
+                      : Icon(icon, color: Colors.white, size: 20)),
             ),
             const SizedBox(width: 14),
             Text(
@@ -270,64 +286,4 @@ class _ProfileDropdownMenu extends StatelessWidget {
       ),
     );
   }
-}
-
-/// ─────────────────────────────────────────────
-///  Custom star+thumb icon for "Ratings"
-/// ─────────────────────────────────────────────
-class _StarThumbIcon extends StatelessWidget {
-  const _StarThumbIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        const Icon(Icons.star_border_rounded, color: Colors.white, size: 18),
-        Positioned(
-          bottom: -2,
-          right: -4,
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFF0D1F33),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(Icons.thumb_up_alt_outlined,
-                color: Colors.white, size: 11),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// ─────────────────────────────────────────────
-///  Small upward-pointing arrow painter
-/// ─────────────────────────────────────────────
-class _ArrowPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final fillPaint = Paint()
-      ..color = const Color(0xFF0D1F33)
-      ..style = PaintingStyle.fill;
-
-    final borderPaint = Paint()
-      ..color = const Color(0xFF1E3A55)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..strokeJoin = StrokeJoin.round;
-
-    final path = Path()
-      ..moveTo(size.width / 2, 0)       // tip pointing UP
-      ..lineTo(size.width, size.height)  // bottom-right
-      ..lineTo(0, size.height)           // bottom-left
-      ..close();
-
-    // Draw border first, then fill on top so border shows only on outside edges
-    canvas.drawPath(path, borderPaint);
-    canvas.drawPath(path, fillPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
