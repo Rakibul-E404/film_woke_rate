@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:woke_movie_rating/features/views/home/popular_movies_section.dart';
 import 'package:woke_movie_rating/features/views/home/spotlight_section.dart';
 import 'package:woke_movie_rating/features/views/home/top_10_wmr_section.dart';
+import 'package:woke_movie_rating/features/widgets/custom_background.dart';
 import '../../widgets/home_widget/custom_search_bar.dart';
 import 'ad_banner_section.dart';
 import 'hero_section.dart';
@@ -161,13 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/noise_background_image.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+    return CustomBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
 

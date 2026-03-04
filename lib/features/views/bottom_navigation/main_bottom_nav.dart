@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woke_movie_rating/features/utils/app_text_styles.dart';
 import 'package:woke_movie_rating/features/views/home/home_screen.dart';
@@ -27,6 +28,15 @@ class _MainBottomNavState extends State<MainBottomNav>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+
+    // ✅ Make the system navigation bar fully transparent
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
+
+    // ✅ Required on Android to actually render behind the system nav bar
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
   @override
@@ -35,7 +45,6 @@ class _MainBottomNavState extends State<MainBottomNav>
     super.dispose();
   }
 
-  // Screens list
   final List<Widget> _screens = [
     const HomeScreen(),
     const LeaderboardScreen(),
@@ -43,7 +52,6 @@ class _MainBottomNavState extends State<MainBottomNav>
     const UserProfileScreen(),
   ];
 
-  // Custom navigation items data
   final List<Map<String, dynamic>> _navItems = [
     {
       'icon': 'assets/icons/home.svg',
@@ -80,16 +88,18 @@ class _MainBottomNavState extends State<MainBottomNav>
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Calculate exact dimensions
-    final outerPadding = 13.0 * 2; // Left + Right outer padding
-    final innerPadding = 8.0 * 2;  // Left + Right inner container padding
-    final totalPadding = outerPadding + innerPadding; // 44px total
+    final outerPadding = 13.0 * 2;
+    final innerPadding = 8.0 * 2;
+    final totalPadding = outerPadding + innerPadding;
     final availableWidth = screenWidth - totalPadding;
-    final itemWidth = availableWidth / _navItems.length; // Each Expanded width
-    final itemMargin = 2.0; // Horizontal margin per side
+    final itemWidth = availableWidth / _navItems.length;
+    final itemMargin = 2.0;
 
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      // ✅ Transparent so screen background shows through the gap areas
+      backgroundColor: Colors.transparent,
+      // ✅ Allows the body content to render behind the bottom nav bar
+      extendBody: true,
       body: IndexedStack(
         index: _selectedIndex,
         children: _screens,
@@ -100,25 +110,22 @@ class _MainBottomNavState extends State<MainBottomNav>
           height: 85.0,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.primaryColor,
+            color: AppColors.mainBottomNavColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              // ✅ 1️⃣ RED SELECTION BOX (BEHIND - painted first)
+              // ✅ Red selection indicator
               AnimatedPositioned(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                // Position from container's left edge:
                 left: (_selectedIndex * itemWidth),
                 top: 10,
                 bottom: 10,
-                // Width matches the item container exactly:
-                // itemWidth - margins on both sides
                 width: itemWidth - (itemMargin * 2),
                 child: Container(
-                  margin: EdgeInsets.zero, // No extra margin
+                  margin: EdgeInsets.zero,
                   decoration: BoxDecoration(
                     color: AppColors.redColor,
                     borderRadius: BorderRadius.circular(15),
@@ -126,7 +133,7 @@ class _MainBottomNavState extends State<MainBottomNav>
                 ),
               ),
 
-              // ✅ 2️⃣ NAV ITEMS (ON TOP - painted last)
+              // ✅ Nav items
               Row(
                 children: List.generate(_navItems.length, (index) {
                   final item = _navItems[index];
@@ -136,13 +143,11 @@ class _MainBottomNavState extends State<MainBottomNav>
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Container(
-                        // This margin creates the gap between items
                         margin: EdgeInsets.symmetric(horizontal: itemMargin),
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        // Wrap the entire content with GestureDetector
                         child: GestureDetector(
                           onTap: () => _onItemTapped(index),
-                          behavior: HitTestBehavior.opaque, // This ensures the entire area is tappable
+                          behavior: HitTestBehavior.opaque,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
