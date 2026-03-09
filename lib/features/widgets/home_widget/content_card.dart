@@ -13,7 +13,7 @@ class ContentCard extends StatelessWidget {
   final double? height;
 
   const ContentCard({
-    Key? key,
+    super.key,
     required this.number,
     required this.title,
     required this.series,
@@ -23,7 +23,7 @@ class ContentCard extends StatelessWidget {
     this.onTap,
     this.width,
     this.height,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

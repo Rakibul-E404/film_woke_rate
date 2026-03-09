@@ -1,22 +1,25 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:woke_movie_rating/features/utils/app_colors.dart';
 import 'package:woke_movie_rating/features/utils/app_text_styles.dart';
 
-class SearchCard extends StatelessWidget {
+class SearchCard extends StatefulWidget {
   final String? title;
-  final String? series;      // e.g. 'TV Series'
-  final String? years;       // e.g. '2016-2025'
-  final String? duration;    // e.g. '1h'
+  final String? series;
+  final String? years;
+  final String? duration;
   final String? rating;
   final String? year;
   final String? imagePath;
   final VoidCallback? onTap;
 
-  /// New optional parameters for top left corner
-  final String? topLeftSvgPath;  // SVG path for top left corner
-  final Widget? topLeftWidget;    // Custom widget for top left corner
-  final double? topLeftSvgSize;   // Size of SVG (default: 24)
+  /// SVG paths for toggle icons
+  final String addSvgPath;
+  final String removeSvgPath;
+
+  /// Optional size
+  final double? topLeftSvgSize;
 
   const SearchCard({
     super.key,
@@ -28,15 +31,29 @@ class SearchCard extends StatelessWidget {
     this.year,
     this.imagePath,
     this.onTap,
-    this.topLeftSvgPath,
-    this.topLeftWidget,
+    required this.addSvgPath,
+    required this.removeSvgPath,
     this.topLeftSvgSize,
   });
 
   @override
+  State<SearchCard> createState() => _SearchCardState();
+}
+
+class _SearchCardState extends State<SearchCard> {
+
+  bool _isAdded = false;
+
+  void _toggleIcon() {
+    setState(() {
+      _isAdded = !_isAdded;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
@@ -45,15 +62,17 @@ class SearchCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+
             /// IMAGE SECTION
             Stack(
               children: [
+
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(0),
                     child: Image.asset(
-                      imagePath ?? 'assets/images/movie_poster.png',
+                      widget.imagePath ?? 'assets/images/movie_poster.png',
                       height: 175,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -61,48 +80,36 @@ class SearchCard extends StatelessWidget {
                         height: 175,
                         width: double.infinity,
                         color: const Color(0xFF1E293B),
-                        child: const Icon(Icons.movie,
-                            color: Colors.white38, size: 48),
+                        child: const Icon(
+                          Icons.movie,
+                          color: Colors.white38,
+                          size: 48,
+                        ),
                       ),
                     ),
                   ),
                 ),
 
-                /// TOP LEFT CORNER SVG/CUSTOM WIDGET
-                if (topLeftSvgPath != null || topLeftWidget != null)
-                  Positioned(
-                    top: 20,
-                    left: 20,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.2),
-                          width: 1,
-                        ),
-                      ),
-                      child: Center(
-                        child: topLeftWidget ??
-                            (topLeftSvgPath != null
-                                ? SvgPicture.asset(
-                              topLeftSvgPath!,
-                              width: topLeftSvgSize ?? 24,
-                              height: topLeftSvgSize ?? 24,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                            )
-                                : null),
+                /// TOGGLE SVG BUTTON (TOP LEFT)
+                Positioned(
+                  top: -1,
+                  left: 01,
+                  child: GestureDetector(
+                    onTap: _toggleIcon,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        _isAdded
+                            ? widget.removeSvgPath
+                            : widget.addSvgPath,
+                        width: widget.topLeftSvgSize ?? 35,
+                        height: widget.topLeftSvgSize ?? 35,
                       ),
                     ),
                   ),
+                ),
 
-                /// CIRCULAR RATING BADGE (only if rating is provided)
-                if (rating != null)
+                /// RATING BADGE
+                if (widget.rating != null)
                   Positioned(
                     bottom: 14,
                     right: 12,
@@ -126,9 +133,9 @@ class SearchCard extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          rating!,
+                          widget.rating!,
                           style: AppTextStyle.smallText.copyWith(
-                              color: AppColors.whiteColor
+                            color: AppColors.whiteColor,
                           ),
                         ),
                       ),
@@ -137,29 +144,32 @@ class SearchCard extends StatelessWidget {
               ],
             ),
 
-            /// TEXT CONTENT (only if title exists)
-            if (title != null)
+            /// TEXT CONTENT
+            if (widget.title != null)
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// Title
+
+                    /// TITLE
                     Text(
-                      title!,
+                      widget.title!,
                       style: AppTextStyle.defaultTextStyle,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    /// Series Info Line (only if at least one of series, years, duration exists)
-                    if (series != null || years != null || duration != null) ...[
+                    if (widget.series != null ||
+                        widget.years != null ||
+                        widget.duration != null) ...[
                       const SizedBox(height: 6),
                       _buildSeriesInfoLine(),
                     ],
 
-                    /// Genre chips (always shown for now, but you can make optional too)
                     const SizedBox(height: 10),
+
+                    /// GENRES
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       physics: const BouncingScrollPhysics(),
@@ -186,15 +196,8 @@ class SearchCard extends StatelessWidget {
     );
   }
 
-  /// Renders: TV Series • 2016-2025 • 1h (only shows available items)
+  /// SERIES INFO LINE
   Widget _buildSeriesInfoLine() {
-    const textStyle = TextStyle(
-      color: Color(0xFFB0BEC5),
-      fontSize: 13,
-      fontWeight: FontWeight.w400,
-      letterSpacing: 0.1,
-    );
-
     const dotStyle = TextStyle(
       color: Color(0xFFB0BEC5),
       fontSize: 13,
@@ -203,13 +206,11 @@ class SearchCard extends StatelessWidget {
 
     List<Widget> children = [];
 
-    // Add series if available
-    if (series != null) {
-      children.add(Text(series!, style: AppTextStyle.smallText));
+    if (widget.series != null) {
+      children.add(Text(widget.series!, style: AppTextStyle.smallText));
     }
 
-    // Add years if available
-    if (years != null) {
+    if (widget.years != null) {
       if (children.isNotEmpty) {
         children.addAll([
           const SizedBox(width: 6),
@@ -217,11 +218,10 @@ class SearchCard extends StatelessWidget {
           const SizedBox(width: 6),
         ]);
       }
-      children.add(Text(years!, style: AppTextStyle.smallText));
+      children.add(Text(widget.years!, style: AppTextStyle.smallText));
     }
 
-    // Add duration if available
-    if (duration != null) {
+    if (widget.duration != null) {
       if (children.isNotEmpty) {
         children.addAll([
           const SizedBox(width: 6),
@@ -229,23 +229,23 @@ class SearchCard extends StatelessWidget {
           const SizedBox(width: 6),
         ]);
       }
-      children.add(Text(duration!, style: AppTextStyle.smallText));
+      children.add(Text(widget.duration!, style: AppTextStyle.smallText));
     }
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: children.isNotEmpty ? children : [const SizedBox.shrink()],
+        children: children,
       ),
     );
   }
 
+  /// GENRE CHIP
   Widget _buildGenreChip(String label) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.transparent,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: Colors.white.withOpacity(0.45),
@@ -257,15 +257,16 @@ class SearchCard extends StatelessWidget {
         style: TextStyle(
           color: Colors.white.withOpacity(0.85),
           fontSize: 10.5,
-          fontWeight: FontWeight.w400,
         ),
       ),
     );
   }
 
   Color _getRatingColor() {
-    if (rating == null) return Colors.grey;
-    final double ratingValue = double.tryParse(rating!) ?? 0;
+    if (widget.rating == null) return Colors.grey;
+
+    final double ratingValue = double.tryParse(widget.rating!) ?? 0;
+
     if (ratingValue >= 8.0) {
       return const Color(0xFFE05A2B);
     } else if (ratingValue >= 6.0) {
