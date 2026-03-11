@@ -39,6 +39,7 @@ dependencies:
   flutter_signin_button: ^2.1.1
   pinput: ^6.0.2
   dropdown_search: ^6.0.2
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
