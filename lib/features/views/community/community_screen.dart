@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:woke_movie_rating/features/views/community/post_details_screen.dart';
 
 import '../../widgets/community/report_post_sheet.dart';
 import '../../widgets/custom_background.dart';
@@ -10,6 +11,10 @@ class CommunityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    String demoText =
+        "When Mel Brooks was preparing for this film, he discovered that Ken Strickfaden who'd made the elaborate electrical machinery for the lab sequences in Frankenstein (1931) and its sequels, was still alive and living in the Los Angeles area.";
+
     return Scaffold(
       body: Stack(
         children: [
@@ -25,25 +30,23 @@ class CommunityScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
-                              const SizedBox(width: 8),
-                              const Text(
-                                "COMMUNITY",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2,
-                                ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+                            const SizedBox(width: 8),
+                            const Text(
+                              "COMMUNITY",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
                               ),
-                              const SizedBox(width: 8),
-                              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 8),
+                            SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+                          ],
                         ),
                       ),
                       const SizedBox(width: 24)
@@ -51,7 +54,7 @@ class CommunityScreen extends StatelessWidget {
                   ),
                 ),
 
-                /// Post Input
+                /// Post input
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Container(
@@ -69,14 +72,12 @@ class CommunityScreen extends StatelessWidget {
                           backgroundImage: AssetImage("assets/images/demo_user.jpg"),
                         ),
                         SizedBox(width: 10),
-
                         Expanded(
                           child: Text(
                             "Share your thoughts!",
                             style: TextStyle(color: Colors.white70),
                           ),
                         ),
-
                         Icon(CupertinoIcons.photo, size: 18, color: Colors.white),
                         SizedBox(width: 8),
                         Icon(CupertinoIcons.video_camera_solid, color: Colors.white),
@@ -92,8 +93,9 @@ class CommunityScreen extends StatelessWidget {
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: 1000,
+                    itemCount: 50,
                     itemBuilder: (context, index) {
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: Container(
@@ -106,13 +108,12 @@ class CommunityScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
 
-                              /// User Info
+                              /// USER INFO
                               Row(
                                 children: [
                                   const CircleAvatar(
                                     backgroundImage: AssetImage("assets/images/demo_user.jpg"),
                                   ),
-
                                   const SizedBox(width: 10),
 
                                   Column(
@@ -144,8 +145,6 @@ class CommunityScreen extends StatelessWidget {
                                   ),
 
                                   const Spacer(),
-
-
                                   const Icon(Icons.cancel_outlined,
                                       color: Colors.white70)
                                 ],
@@ -153,26 +152,63 @@ class CommunityScreen extends StatelessWidget {
 
                               const SizedBox(height: 10),
 
-                              /// Post text
+                              /// POST TEXT (3 line limit)
                               Text(
-                                "This is demo community post #${index + 1}. Scroll to see more posts.",
+                                demoText,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(color: Colors.white),
                               ),
 
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 4),
 
-                              /// Image
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.asset(
-                                  "assets/images/movie_poster2.png",
-                                  fit: BoxFit.fitWidth,
+                              /// SEE MORE
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PostDetailScreen(
+                                        text: demoText,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  "See more",
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
 
                               const SizedBox(height: 12),
 
-                              /// Actions
+                              /// IMAGE
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => PostDetailScreen(
+                                        text: demoText,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.asset(
+                                    "assets/images/movie_poster2.png",
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              /// ACTIONS
                               Row(
                                 children: [
                                   const Icon(CupertinoIcons.arrow_up,
@@ -187,19 +223,37 @@ class CommunityScreen extends StatelessWidget {
 
                                   const SizedBox(width: 20),
 
-                                  const Icon(CupertinoIcons.chat_bubble,
-                                      color: Colors.white70),
-                                  const SizedBox(width: 4),
-                                  Text("${200 + index}",
-                                      style: const TextStyle(color: Colors.white70)),
+                                  /// OPEN POST DETAIL
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => PostDetailScreen(
+                                            text: demoText,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Icon(CupertinoIcons.chat_bubble,
+                                            color: Colors.white70),
+                                        const SizedBox(width: 4),
+                                        Text("${200 + index}",
+                                            style: const TextStyle(color: Colors.white70)),
+                                      ],
+                                    ),
+                                  ),
 
                                   const SizedBox(width: 20),
-                                  // const Spacer(),
 
                                   const Icon(CupertinoIcons.arrow_2_squarepath,
                                       color: Colors.white70),
+
                                   const Spacer(),
-                                  /// OPEN REPORT POPUP
+
+                                  /// REPORT
                                   GestureDetector(
                                     onTap: () {
                                       showModalBottomSheet(
@@ -229,7 +283,3 @@ class CommunityScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
