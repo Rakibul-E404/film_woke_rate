@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/app_text_styles.dart';
+
+import '../../widgets/community/report_post_sheet.dart';
+import '../../widgets/custom_background.dart';
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
@@ -9,243 +11,225 @@ class CommunityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Text(
-                    'Community',
-                    style: AppTextStyle.largeHeadingFranchise,
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.search, color: Colors.white, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'Search',
-                          style: TextStyle(color: Colors.white),
+      body: Stack(
+        children: [
+          const CustomBackground(),
+
+          SafeArea(
+            child: Column(
+              children: [
+
+                /// Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+                              const SizedBox(width: 8),
+                              const Text(
+                                "COMMUNITY",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+                            ],
+                          ),
                         ),
+                      ),
+                      const SizedBox(width: 24)
+                    ],
+                  ),
+                ),
+
+                /// Post Input
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(.05),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Row(
+                      children: const [
+                        CircleAvatar(
+                          backgroundImage: AssetImage("assets/images/demo_user.jpg"),
+                        ),
+                        SizedBox(width: 10),
+
+                        Expanded(
+                          child: Text(
+                            "Share your thoughts!",
+                            style: TextStyle(color: Colors.white70),
+                          ),
+                        ),
+
+                        Icon(CupertinoIcons.photo, size: 18, color: Colors.white),
+                        SizedBox(width: 8),
+                        Icon(CupertinoIcons.video_camera_solid, color: Colors.white),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            // Categories
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  _buildCategoryChip('For You', true),
-                  const SizedBox(width: 8),
-                  _buildCategoryChip('Following', false),
-                  const SizedBox(width: 8),
-                  _buildCategoryChip('Popular', false),
-                  const Spacer(),
-                  const Icon(Icons.filter_list, color: Colors.white),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Posts Feed
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return _buildPostCard(index);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCategoryChip(String label, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primaryColor : Colors.white.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? Colors.transparent : Colors.white.withOpacity(0.2),
-        ),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _buildPostCard(int index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          // User Info
-          Row(
-            children: [
-              const CircleAvatar(
-                radius: 20,
-                backgroundImage: AssetImage('assets/images/demo_user.jpg'),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'MovieBuff123',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '2 hours ago',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-              Icon(Icons.more_horiz, color: Colors.white.withOpacity(0.7)),
-            ],
-          ),
-          const SizedBox(height: 12),
 
-          // Post Content
-          const Text(
-            'Just watched "Dune: Part Two" and it was absolutely incredible! The cinematography, the score, the performances... Everything was perfect. What did you guys think? 🎬',
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          ),
-          const SizedBox(height: 12),
+                const SizedBox(height: 15),
 
-          // Movie Tag
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'DUNE',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
+                /// Feed
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Dune: Part Two',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: 1000,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: const Color(0xff203B4F),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+
+                              /// User Info
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundImage: AssetImage("assets/images/demo_user.jpg"),
+                                  ),
+
+                                  const SizedBox(width: 10),
+
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: const [
+                                          Text(
+                                            "Miranda Baju",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(width: 6),
+                                          Text(
+                                            "Follow",
+                                            style: TextStyle(
+                                                color: Colors.orange,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        "Posted ${index + 1} mins ago",
+                                        style: const TextStyle(
+                                            color: Colors.white70, fontSize: 12),
+                                      )
+                                    ],
+                                  ),
+
+                                  const Spacer(),
+
+
+                                  const Icon(Icons.cancel_outlined,
+                                      color: Colors.white70)
+                                ],
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              /// Post text
+                              Text(
+                                "This is demo community post #${index + 1}. Scroll to see more posts.",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              /// Image
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.asset(
+                                  "assets/images/movie_poster2.png",
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+
+                              const SizedBox(height: 12),
+
+                              /// Actions
+                              Row(
+                                children: [
+                                  const Icon(CupertinoIcons.arrow_up,
+                                      color: Colors.white70),
+                                  const SizedBox(width: 4),
+                                  Text("${index + 1}k",
+                                      style: const TextStyle(color: Colors.white70)),
+
+                                  const SizedBox(width: 4),
+                                  const Icon(CupertinoIcons.arrow_down,
+                                      color: Colors.white70),
+
+                                  const SizedBox(width: 20),
+
+                                  const Icon(CupertinoIcons.chat_bubble,
+                                      color: Colors.white70),
+                                  const SizedBox(width: 4),
+                                  Text("${200 + index}",
+                                      style: const TextStyle(color: Colors.white70)),
+
+                                  const SizedBox(width: 20),
+                                  // const Spacer(),
+
+                                  const Icon(CupertinoIcons.arrow_2_squarepath,
+                                      color: Colors.white70),
+                                  const Spacer(),
+                                  /// OPEN REPORT POPUP
+                                  GestureDetector(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        backgroundColor: Colors.transparent,
+                                        builder: (_) => const ReportPostSheet(),
+                                      );
+                                    },
+                                    child: const Icon(Icons.more_horiz,
+                                        color: Colors.white70),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      Text(
-                        '2024 • Sci-Fi',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        "assets/icons/rate_fill.svg",
-                        height: 12,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
-                        '9.2',
-                        style: TextStyle(color: Colors.green, fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
+                )
               ],
             ),
-          ),
-          const SizedBox(height: 12),
-
-          // Interaction Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildInteractionButton(Icons.favorite_border, '234'),
-              _buildInteractionButton(Icons.comment_outlined, '56'),
-              _buildInteractionButton(Icons.repeat, '12'),
-              _buildInteractionButton(Icons.share_outlined, '8'),
-            ],
           ),
         ],
       ),
     );
   }
-
-  Widget _buildInteractionButton(IconData icon, String count) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.white.withOpacity(0.7), size: 18),
-        const SizedBox(width: 4),
-        Text(
-          count,
-          style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 12),
-        ),
-      ],
-    );
-  }
 }
+
+
+
+
