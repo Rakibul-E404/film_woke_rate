@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:woke_movie_rating/features/utils/app_colors.dart';
+import 'package:woke_movie_rating/features/views/community/new_post_screen.dart';
 import 'package:woke_movie_rating/features/views/community/post_details_screen.dart';
 
 import '../../widgets/community/report_post_sheet.dart';
-import '../../widgets/custom_background.dart';
+import '../../widgets/custom_background.dart' ;
 
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
@@ -67,20 +71,31 @@ class CommunityScreen extends StatelessWidget {
                       ),
                     ),
                     child: Row(
-                      children: const [
-                        CircleAvatar(
+                      children: [
+                        const CircleAvatar(
                           backgroundImage: AssetImage("assets/images/demo_user.jpg"),
                         ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            "Share your thoughts!",
-                            style: TextStyle(color: Colors.white70),
+                        const SizedBox(width: 10),
+                         Expanded(
+                          child: GestureDetector(
+                            onTap: (){Get.to(()=>NewPostScreen());},
+                            child: Container(
+                              decoration: BoxDecoration(
+                              color: AppColors.whiteColor,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                "Share your thoughts!",
+                                style: TextStyle(color: AppColors.greyColor),
+                              ),
+                            ),
                           ),
                         ),
-                        Icon(CupertinoIcons.photo, size: 18, color: Colors.white),
-                        SizedBox(width: 8),
-                        Icon(CupertinoIcons.video_camera_solid, color: Colors.white),
+                        const SizedBox(width: 8),
+                        const Icon(CupertinoIcons.photo, size: 18, color: Colors.white),
+                        const SizedBox(width: 8),
+                        const Icon(CupertinoIcons.video_camera_solid, color: Colors.white),
                       ],
                     ),
                   ),
