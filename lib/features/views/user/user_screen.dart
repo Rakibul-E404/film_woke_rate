@@ -1,385 +1,483 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../../utils/app_colors.dart';
-import '../../utils/app_text_styles.dart';
 
-class UserProfileScreen extends StatelessWidget {
+import '../../widgets/custom_background.dart';
+
+class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
+
+  @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  int _selectedIndex = 3;
+  int _selectedTabIndex = 0;
+
+  void _onBottomNavTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void _onTabTap(int index) {
+    setState(() {
+      _selectedTabIndex = index;
+    });
+  }
+
+  final List<String> tabs = [
+    'Repost',
+    'Ratings',
+    'Watchlist',
+    'Favorites',
+    'Watched',
+  ];
+
+  // Height of the cover/banner image in the SliverAppBar
+  static const double _coverHeight = 200.0;
+  // How much the avatar overlaps into the cover image from the bottom
+  static const double _avatarRadius = 40.0;
+  static const double _avatarOverlap = 24.0; // px that go INTO the cover
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header with settings
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  Text(
-                    'Profile',
-                    style: AppTextStyle.largeHeadingFranchise,
-                  ),
-                  const Spacer(),
-                  Icon(Icons.settings_outlined, color: Colors.white),
-                  const SizedBox(width: 16),
-                  Icon(Icons.notifications_none, color: Colors.white),
-                ],
-              ),
-            ),
+      extendBodyBehindAppBar: true,
+      body: CustomBackground(
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              // ── Scrollable area ──────────────────────────────────────────
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    // ── SliverAppBar (cover image) — NOT pinned, scrolls away fully ──
+                    SliverAppBar(
+                      expandedHeight: _coverHeight,
+                      pinned: false,
+                      floating: false,
+                      snap: false,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      automaticallyImplyLeading: false,
 
-            // Profile Info
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
+                      // No leading/actions — they live inside the cover Stack below
+                      leading: const SizedBox.shrink(),
+
+                      // The large cover / banner image
+                      flexibleSpace: FlexibleSpaceBar(
+                        collapseMode: CollapseMode.pin,
+                        background: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            // Cover image
+                            Image.asset(
+                              'assets/images/demo_user.jpg',
+                              fit: BoxFit.cover,
+                            ),
+                            // Subtle dark gradient — top (for button legibility)
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.black.withOpacity(0.45),
+                                      Colors.transparent,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Subtle dark gradient — bottom (avatar transition)
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black.withOpacity(0.55),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Back button — top left
+                            Positioned(
+                              top: 8,
+                              left: 4,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back,
+                                    color: Colors.white),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ),
+                            // Notification + more — top right
+                            Positioned(
+                              top: 8,
+                              right: 4,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                        Icons.notifications_outlined,
+                                        color: Colors.white),
+                                    onPressed: () {},
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.more_vert,
+                                        color: Colors.white),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Camera icon (bottom-right of cover)
+                            Positioned(
+                              bottom: _avatarRadius * 2 -
+                                  _avatarOverlap +
+                                  8,
+                              right: 16,
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.white, width: 2),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // ── Floating avatar that overlaps the bottom of the
+                      //    cover image ─────────────────────────────────────
+                      bottom: PreferredSize(
+                        preferredSize:
+                        Size.fromHeight(_avatarRadius + _avatarOverlap),
+                        child: Transform.translate(
+                          // Shift the avatar upward so it "bites into" the
+                          // cover by _avatarOverlap pixels
+                          offset: Offset(0, _avatarRadius),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  // White ring / border effect
+                                  Container(
+                                    width: _avatarRadius * 2 + 4,
+                                    height: _avatarRadius * 2 + 4,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                        width: 3,
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                          Colors.black.withOpacity(0.4),
+                                          blurRadius: 12,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: CircleAvatar(
+                                      radius: _avatarRadius,
+                                      backgroundImage: const AssetImage(
+                                          'assets/images/demo_user.jpg'),
+                                      backgroundColor: Colors.grey[300],
+                                    ),
+                                  ),
+                                  // Small camera badge on avatar
+                                  Positioned(
+                                    bottom: 2,
+                                    right: 2,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: Colors.white, width: 1.5),
+                                      ),
+                                      child: const Icon(
+                                        Icons.camera_alt,
+                                        size: 12,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // ── Profile name + stats (below the avatar) ───────────
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        // Top padding = how much avatar hangs below the bar
+                        padding: EdgeInsets.fromLTRB(
+                            16, _avatarRadius + 12, 16, 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Tasmiashabu',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '50 Followers · 102 Following',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // ── Sticky Tab bar ────────────────────────────────────
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _TabBarDelegate(
+                        tabs: tabs,
+                        selectedIndex: _selectedTabIndex,
+                        onTabTap: _onTabTap,
+                      ),
+                    ),
+
+                    // ── Content Grid ──────────────────────────────────────
+                    SliverPadding(
+                      padding: const EdgeInsets.all(8),
+                      sliver: SliverGrid(
+                        delegate: SliverChildBuilderDelegate(
+                              (context, index) => _buildGridItem(),
+                          childCount: 6,
+                        ),
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.75,
+                          crossAxisSpacing: 8,
+                          mainAxisSpacing: 8,
+                        ),
+                      ),
+                    ),
+
+                    // Bottom padding so last items clear the nav bar
+                    const SliverToBoxAdapter(
+                      child: SizedBox(height: 16),
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridItem() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[800],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
+                  child: Image.asset(
+                    'assets/movie.jpg',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.black54,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'When Mel Brooks was preparing for this film, he discovered that Ken Strickfaden preparing for...',
+                  style: TextStyle(fontSize: 12, color: Colors.grey[300]),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Row(
                   children: [
-                    // Avatar and stats
                     const CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('assets/images/demo_user.jpg'),
+                      radius: 10,
+                      backgroundColor: Colors.green,
+                      child: Icon(Icons.check, size: 12, color: Colors.white),
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Tasmia Hassan Shabonty',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '@tasmia_hassan',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Stats Row
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildStatItem('Reviews', '247'),
-                          _buildStatItem('Followers', '1.2k'),
-                          _buildStatItem('Following', '345'),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Bio
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E293B),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Bio',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Movie enthusiast 🎬 | Sci-fi lover 🚀 | Always looking for the next great story. Based in NYC.',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.8),
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Icon(Icons.location_on, size: 16, color: Colors.white.withOpacity(0.5)),
-                              const SizedBox(width: 4),
-                              Text(
-                                'New York, USA',
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.5),
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Icon(Icons.cake, size: 16, color: Colors.white.withOpacity(0.5)),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Joined Mar 2023',
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.5),
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Edit Profile Button
-                    Container(
-                      width: double.infinity,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white.withOpacity(0.3)),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Tabs
-                    DefaultTabController(
-                      length: 3,
-                      child: Column(
-                        children: [
-                          const TabBar(
-                            indicatorColor: AppColors.primaryColor,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: Colors.grey,
-                            tabs: [
-                              Tab(text: 'Reviews'),
-                              Tab(text: 'Watchlist'),
-                              Tab(text: 'Lists'),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          SizedBox(
-                            height: 400,
-                            child: TabBarView(
-                              children: [
-                                _buildReviewsTab(),
-                                _buildWatchlistTab(),
-                                _buildListsTab(),
-                              ],
-                            ),
-                          ),
-                        ],
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        "saved from Tasmia Shabonty's post",
+                        style:
+                        TextStyle(fontSize: 10, color: Colors.grey[400]),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+  Widget _buildBottomNavItem(IconData icon, String label, int index) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => _onBottomNavTap(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon,
+              color: isSelected ? Colors.white : Colors.grey, size: 24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: isSelected ? Colors.white : Colors.grey,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.7),
-            fontSize: 12,
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+}
 
-  Widget _buildReviewsTab() {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 50,
-                height: 70,
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Center(
+// ─── Sticky Tab Bar Delegate ───────────────────────────────────────────────────
+
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final List<String> tabs;
+  final int selectedIndex;
+  final ValueChanged<int> onTabTap;
+
+  const _TabBarDelegate({
+    required this.tabs,
+    required this.selectedIndex,
+    required this.onTabTap,
+  });
+
+  @override
+  double get minExtent => 48;
+
+  @override
+  double get maxExtent => 48;
+
+  @override
+  bool shouldRebuild(_TabBarDelegate oldDelegate) =>
+      oldDelegate.selectedIndex != selectedIndex;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.black.withOpacity(0.85),
+      height: 48,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(
+            tabs.length,
+                (index) {
+              final isActive = selectedIndex == index;
+              return GestureDetector(
+                onTap: () => onTabTap(index),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: isActive ? Colors.red : Colors.transparent,
+                        width: 3,
+                      ),
+                    ),
+                  ),
                   child: Text(
-                    'POSTER',
-                    style: TextStyle(color: Colors.white, fontSize: 8),
+                    tabs[index],
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: isActive
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isActive ? Colors.white : Colors.grey[400],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Dune: Part Two',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icons/rate_fill.svg",
-                          height: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        const Text(
-                          '9.2',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '• 2 days ago',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.5),
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'A masterpiece of science fiction...',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              );
+            },
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildWatchlistTab() {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-        childAspectRatio: 0.7,
+        ),
       ),
-      itemCount: 9,
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.blueGrey,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const Center(
-            child: Text(
-              'MOVIE',
-              style: TextStyle(color: Colors.white, fontSize: 10),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildListsTab() {
-    return ListView.builder(
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Colors.blueGrey,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(Icons.list, color: Colors.white, size: 20),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Best Sci-Fi Movies ${index + 1}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      '${12 + index} movies',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
-            ],
-          ),
-        );
-      },
     );
   }
 }

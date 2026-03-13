@@ -185,3 +185,4 @@ class NewPostScreen extends StatelessWidget {
     );
   }
 }
+
