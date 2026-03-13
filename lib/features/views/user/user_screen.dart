@@ -74,7 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           children: [
                             // Cover image
                             Image.asset(
-                              'assets/images/demo_user.jpg',
+                              'assets/images/demo_profile_cover.png',
                               fit: BoxFit.cover,
                             ),
                             // Subtle dark gradient — top (for button legibility)
@@ -316,7 +316,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey[800],
+        color: AppColors.primaryColor
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -328,7 +328,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(12)),
                   child: Image.asset(
-                    'assets/movie.jpg',
+                    'assets/images/movie_poster2.png',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
@@ -337,17 +337,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Positioned(
                   top: 8,
                   right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: Colors.black54,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.close,
-                      size: 16,
-                      color: Colors.white,
-                    ),
+                  child: const Icon(
+                    Icons.close,
+                    size: 16,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -368,9 +361,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 Row(
                   children: [
                     const CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Colors.green,
-                      child: Icon(Icons.check, size: 12, color: Colors.white),
+                      radius: 15,
+                     foregroundImage: AssetImage("assets/images/demo_user.jpg"),
                     ),
                     const SizedBox(width: 4),
                     Expanded(
@@ -416,6 +408,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
 // ─── Sticky Tab Bar Delegate ───────────────────────────────────────────────────
 
+
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   final List<String> tabs;
   final int selectedIndex;
@@ -429,7 +422,6 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   double get minExtent => 48;
-
   @override
   double get maxExtent => 48;
 
@@ -437,108 +429,55 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(_TabBarDelegate oldDelegate) =>
       oldDelegate.selectedIndex != selectedIndex;
 
-  // @override
-  // Widget build(
-  //     BuildContext context, double shrinkOffset, bool overlapsContent)
-  // {
-  //   return Container(
-  //     color: AppColors.transparentColor,
-  //     height: 48,
-  //     child: SingleChildScrollView(
-  //       scrollDirection: Axis.horizontal,
-  //       child: Row(
-  //         children: List.generate(
-  //           tabs.length,
-  //               (index) {
-  //             final isActive = selectedIndex == index;
-  //             return GestureDetector(
-  //               onTap: () => onTabTap(index),
-  //               child: Container(
-  //                 padding: const EdgeInsets.symmetric(
-  //                     horizontal: 16.0, vertical: 12.0),
-  //                 decoration: BoxDecoration(
-  //                   border: Border(
-  //                     bottom: BorderSide(
-  //                       color: isActive ? Colors.red : Colors.transparent,
-  //                       width: 3,
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 child: Text(
-  //                   tabs[index],
-  //                   style: TextStyle(
-  //                     fontSize: 15,
-  //                     fontWeight: isActive
-  //                         ? FontWeight.bold
-  //                         : FontWeight.normal,
-  //                     color: isActive ? Colors.white : Colors.grey[400],
-  //                   ),
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        color: AppColors.transparentColor,
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey.shade700, // base line under all tabs
-            width: 1,
-          ),
-        ),
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: List.generate(
-            tabs.length,
-                (index) {
-              final isActive = selectedIndex == index;
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
+        final tabCount = tabs.length;
+        final availableWidthPerTab = (availableWidth / tabCount) - 24;
+        final dynamicFontSize = (availableWidthPerTab * 0.7).clamp(10.0, 16.0);
 
-              return GestureDetector(
-                onTap: () => onTabTap(index),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: isActive
-                            ? Colors.red // selected tab indicator
-                            : AppColors.greyColor,
-                        width: 3,
+        return Container(
+          color: AppColors.primaryColor,
+          child: Row(
+            children: List.generate(
+              tabs.length,
+                  (index) {
+                final isActive = selectedIndex == index;
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => onTabTap(index),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: isActive ? Colors.red : AppColors.greyColor,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        tabs[index],
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: dynamicFontSize,
+                          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                          color: isActive ? Colors.white : Colors.grey[400],
+                        ),
                       ),
                     ),
                   ),
-                  child: Text(
-                    tabs[index],
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight:
-                      isActive ? FontWeight.bold : FontWeight.normal,
-                      color: isActive ? Colors.white : Colors.grey[400],
-                    ),
-                  ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

@@ -160,7 +160,7 @@ class CommunityScreen extends StatelessWidget {
                                   ),
 
                                   const Spacer(),
-                                  const Icon(Icons.cancel_outlined,
+                                  const Icon(Icons.close,
                                       color: Colors.white70)
                                 ],
                               ),
