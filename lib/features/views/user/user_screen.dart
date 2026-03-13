@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/app_colors.dart';
 import '../../widgets/custom_background.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -440,7 +441,7 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Colors.black.withOpacity(0.85),
+      color: AppColors.transparentColor,
       height: 48,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
