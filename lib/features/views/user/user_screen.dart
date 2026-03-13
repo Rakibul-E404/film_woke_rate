@@ -437,12 +437,68 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(_TabBarDelegate oldDelegate) =>
       oldDelegate.selectedIndex != selectedIndex;
 
+  // @override
+  // Widget build(
+  //     BuildContext context, double shrinkOffset, bool overlapsContent)
+  // {
+  //   return Container(
+  //     color: AppColors.transparentColor,
+  //     height: 48,
+  //     child: SingleChildScrollView(
+  //       scrollDirection: Axis.horizontal,
+  //       child: Row(
+  //         children: List.generate(
+  //           tabs.length,
+  //               (index) {
+  //             final isActive = selectedIndex == index;
+  //             return GestureDetector(
+  //               onTap: () => onTabTap(index),
+  //               child: Container(
+  //                 padding: const EdgeInsets.symmetric(
+  //                     horizontal: 16.0, vertical: 12.0),
+  //                 decoration: BoxDecoration(
+  //                   border: Border(
+  //                     bottom: BorderSide(
+  //                       color: isActive ? Colors.red : Colors.transparent,
+  //                       width: 3,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 child: Text(
+  //                   tabs[index],
+  //                   style: TextStyle(
+  //                     fontSize: 15,
+  //                     fontWeight: isActive
+  //                         ? FontWeight.bold
+  //                         : FontWeight.normal,
+  //                     color: isActive ? Colors.white : Colors.grey[400],
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: AppColors.transparentColor,
       height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.transparentColor,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.shade700, // base line under all tabs
+            width: 1,
+          ),
+        ),
+      ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -450,15 +506,20 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
             tabs.length,
                 (index) {
               final isActive = selectedIndex == index;
+
               return GestureDetector(
                 onTap: () => onTabTap(index),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 12.0),
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        color: isActive ? Colors.red : Colors.transparent,
+                        color: isActive
+                            ? Colors.red // selected tab indicator
+                            : AppColors.greyColor,
                         width: 3,
                       ),
                     ),
@@ -467,9 +528,8 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
                     tabs[index],
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: isActive
-                          ? FontWeight.bold
-                          : FontWeight.normal,
+                      fontWeight:
+                      isActive ? FontWeight.bold : FontWeight.normal,
                       color: isActive ? Colors.white : Colors.grey[400],
                     ),
                   ),
@@ -481,4 +541,6 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
       ),
     );
   }
+
+
 }
