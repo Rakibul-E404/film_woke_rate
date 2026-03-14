@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../../utils/app_colors.dart';
 import '../../widgets/custom_background.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Main Screen
+// ─────────────────────────────────────────────────────────────────────────────
+
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
 
@@ -11,34 +15,31 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  int _selectedIndex = 3;
+  int _selectedIndex    = 3;
   int _selectedTabIndex = 0;
 
-  void _onBottomNavTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  void _onTabTap(int index) {
-    setState(() {
-      _selectedTabIndex = index;
-    });
-  }
+  void _onBottomNavTap(int index) => setState(() => _selectedIndex    = index);
+  void _onTabTap(int index)       => setState(() => _selectedTabIndex = index);
 
   final List<String> tabs = [
-    'Repost',
-    'Ratings',
-    'Watchlist',
-    'Favorites',
-    'Watched',
+    'Repost', 'Ratings', 'Watchlist', 'Favorites', 'Watched',
   ];
 
-  // Height of the cover/banner image in the SliverAppBar
-  static const double _coverHeight = 200.0;
-  // How much the avatar overlaps into the cover image from the bottom
-  static const double _avatarRadius = 40.0;
-  static const double _avatarOverlap = 24.0; // px that go INTO the cover
+  static const double _coverHeight   = 200.0;
+  static const double _avatarRadius  = 40.0;
+  static const double _avatarOverlap = 24.0;
+
+  // ── helpers ─────────────────────────────────────────────────────────────
+  Widget _tabContent() {
+    switch (_selectedTabIndex) {
+      case 0:  return const RepostTabContent();
+      case 1:  return const RatingsTabContent();
+      case 2:  return const WatchlistTabContent();
+      case 3:  return const FavoritesTabContent();
+      case 4:  return const WatchedTabContent();
+      default: return const SizedBox.shrink();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +50,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           bottom: false,
           child: Column(
             children: [
-              // ── Scrollable area ──────────────────────────────────────────
               Expanded(
                 child: CustomScrollView(
                   slivers: [
-                    // ── SliverAppBar (cover image) — NOT pinned, scrolls away fully ──
+
+                    // ── Cover / AppBar ──────────────────────────────────
                     SliverAppBar(
                       expandedHeight: _coverHeight,
                       pinned: false,
@@ -62,26 +63,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       automaticallyImplyLeading: false,
-
-                      // No leading/actions — they live inside the cover Stack below
                       leading: const SizedBox.shrink(),
-
-                      // The large cover / banner image
                       flexibleSpace: FlexibleSpaceBar(
                         collapseMode: CollapseMode.pin,
                         background: Stack(
                           fit: StackFit.expand,
                           children: [
-                            // Cover image
                             Image.asset(
                               'assets/images/demo_profile_cover.png',
                               fit: BoxFit.cover,
                             ),
-                            // Subtle dark gradient — top (for button legibility)
+                            // top gradient
                             Positioned(
-                              top: 0,
-                              left: 0,
-                              right: 0,
+                              top: 0, left: 0, right: 0,
                               child: Container(
                                 height: 80,
                                 decoration: BoxDecoration(
@@ -96,11 +90,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ),
                               ),
                             ),
-                            // Subtle dark gradient — bottom (avatar transition)
+                            // bottom gradient
                             Positioned(
-                              bottom: 0,
-                              left: 0,
-                              right: 0,
+                              bottom: 0, left: 0, right: 0,
                               child: Container(
                                 height: 80,
                                 decoration: BoxDecoration(
@@ -115,69 +107,47 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ),
                               ),
                             ),
-                            // Back button — top left
                             Positioned(
-                              top: 8,
-                              left: 4,
+                              top: 8, left: 4,
                               child: IconButton(
-                                icon: const Icon(Icons.arrow_back,
-                                    color: Colors.white),
+                                icon: const Icon(Icons.arrow_back, color: Colors.white),
                                 onPressed: () => Navigator.pop(context),
                               ),
                             ),
-                            // Notification + more — top right
                             Positioned(
-                              top: 8,
-                              right: 4,
+                              top: 8, right: 4,
                               child: Row(
                                 children: [
                                   IconButton(
-                                    icon: const Icon(
-                                        Icons.notifications_outlined,
-                                        color: Colors.white),
+                                    icon: const Icon(Icons.notifications_outlined, color: Colors.white),
                                     onPressed: () {},
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.more_vert,
-                                        color: Colors.white),
+                                    icon: const Icon(Icons.more_vert, color: Colors.white),
                                     onPressed: () {},
                                   ),
                                 ],
                               ),
                             ),
-                            // Camera icon (bottom-right of cover)
                             Positioned(
-                              bottom: _avatarRadius * 2 -
-                                  _avatarOverlap +
-                                  8,
+                              bottom: _avatarRadius * 2 - _avatarOverlap + 8,
                               right: 16,
                               child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: Colors.blue,
                                   shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Colors.white, width: 2),
+                                  border: Border.all(color: Colors.white, width: 2),
                                 ),
-                                child: const Icon(
-                                  Icons.camera_alt,
-                                  size: 14,
-                                  color: Colors.white,
-                                ),
+                                child: const Icon(Icons.camera_alt, size: 14, color: Colors.white),
                               ),
                             ),
                           ],
                         ),
                       ),
-
-                      // ── Floating avatar that overlaps the bottom of the
-                      //    cover image ─────────────────────────────────────
                       bottom: PreferredSize(
-                        preferredSize:
-                        Size.fromHeight(_avatarRadius + _avatarOverlap),
+                        preferredSize: Size.fromHeight(_avatarRadius + _avatarOverlap),
                         child: Transform.translate(
-                          // Shift the avatar upward so it "bites into" the
-                          // cover by _avatarOverlap pixels
                           offset: Offset(0, _avatarRadius),
                           child: Align(
                             alignment: Alignment.centerLeft,
@@ -186,20 +156,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               child: Stack(
                                 clipBehavior: Clip.none,
                                 children: [
-                                  // White ring / border effect
                                   Container(
                                     width: _avatarRadius * 2 + 4,
                                     height: _avatarRadius * 2 + 4,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 3,
-                                      ),
+                                      border: Border.all(color: Colors.white, width: 3),
                                       boxShadow: [
                                         BoxShadow(
-                                          color:
-                                          Colors.black.withOpacity(0.4),
+                                          color: Colors.black.withOpacity(0.4),
                                           blurRadius: 12,
                                           spreadRadius: 2,
                                         ),
@@ -207,28 +172,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     ),
                                     child: CircleAvatar(
                                       radius: _avatarRadius,
-                                      backgroundImage: const AssetImage(
-                                          'assets/images/demo_user.jpg'),
+                                      backgroundImage: const AssetImage('assets/images/demo_user.jpg'),
                                       backgroundColor: Colors.grey[300],
                                     ),
                                   ),
-                                  // Small camera badge on avatar
                                   Positioned(
-                                    bottom: 2,
-                                    right: 2,
+                                    bottom: 2, right: 2,
                                     child: Container(
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: Colors.blue,
                                         shape: BoxShape.circle,
-                                        border: Border.all(
-                                            color: Colors.white, width: 1.5),
+                                        border: Border.all(color: Colors.white, width: 1.5),
                                       ),
-                                      child: const Icon(
-                                        Icons.camera_alt,
-                                        size: 12,
-                                        color: Colors.white,
-                                      ),
+                                      child: const Icon(Icons.camera_alt, size: 12, color: Colors.white),
                                     ),
                                   ),
                                 ],
@@ -239,12 +196,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
 
-                    // ── Profile name + stats (below the avatar) ───────────
+                    // ── Name + stats ────────────────────────────────────
                     SliverToBoxAdapter(
                       child: Padding(
-                        // Top padding = how much avatar hangs below the bar
-                        padding: EdgeInsets.fromLTRB(
-                            16, _avatarRadius + 12, 16, 8),
+                        padding: EdgeInsets.fromLTRB(16, _avatarRadius + 12, 16, 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -259,17 +214,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             const SizedBox(height: 4),
                             Text(
                               '50 Followers · 102 Following',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[300],
-                              ),
+                              style: TextStyle(fontSize: 14, color: Colors.grey[300]),
                             ),
                           ],
                         ),
                       ),
                     ),
 
-                    // ── Sticky Tab bar ────────────────────────────────────
+                    // ── Sticky Tab bar ──────────────────────────────────
                     SliverPersistentHeader(
                       pinned: true,
                       delegate: _TabBarDelegate(
@@ -279,31 +231,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                     ),
 
-                    // ── Content Grid ──────────────────────────────────────
-                    SliverPadding(
-                      padding: const EdgeInsets.all(8),
-                      sliver: SliverGrid(
-                        delegate: SliverChildBuilderDelegate(
-                              (context, index) => _buildGridItem(),
-                          childCount: 16,
-                        ),
-                        gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.75,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                        ),
-                      ),
-                    ),
+                    // ── Tab content ─────────────────────────────────────
+                    SliverToBoxAdapter(child: _tabContent()),
 
-                    // Bottom padding so last items clear the nav bar
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 100),
-                    ),
+                    const SliverToBoxAdapter(child: SizedBox(height: 100)),
                   ],
                 ),
               ),
+
 
             ],
           ),
@@ -312,71 +247,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildGridItem() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.primaryColor
-      ),
+  Widget _buildBottomNavItem(IconData icon, String label, int index) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => _onBottomNavTap(index),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.asset(
-                    'assets/images/movie_poster2.png',
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: const Icon(
-                    Icons.close,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'When Mel Brooks was preparing for this film, he discovered that Ken Strickfaden preparing for...',
-                  style: TextStyle(fontSize: 12, color: Colors.grey[300]),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 15,
-                     foregroundImage: AssetImage("assets/images/demo_user.jpg"),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        "saved from Tasmia Shabonty's post",
-                        style:
-                        TextStyle(fontSize: 10, color: Colors.grey[400]),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          Icon(icon, color: isSelected ? Colors.white : Colors.grey, size: 24),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : Colors.grey),
           ),
         ],
       ),
@@ -384,8 +266,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 }
 
-// ─── Sticky Tab Bar Delegate ───────────────────────────────────────────────────
-
+// ─────────────────────────────────────────────────────────────────────────────
+//  Tab Bar Delegate
+// ─────────────────────────────────────────────────────────────────────────────
 
 class _TabBarDelegate extends SliverPersistentHeaderDelegate {
   final List<String> tabs;
@@ -398,66 +281,604 @@ class _TabBarDelegate extends SliverPersistentHeaderDelegate {
     required this.onTabTap,
   });
 
-  @override
-  double get minExtent => 48;
-  @override
-  double get maxExtent => 48;
+  @override double get minExtent => 48;
+  @override double get maxExtent => 48;
 
   @override
-  bool shouldRebuild(_TabBarDelegate oldDelegate) =>
-      oldDelegate.selectedIndex != selectedIndex;
-
+  bool shouldRebuild(_TabBarDelegate old) => old.selectedIndex != selectedIndex;
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final availableWidth = constraints.maxWidth;
-        final tabCount = tabs.length;
-        final availableWidthPerTab = (availableWidth / tabCount) - 24;
-        final dynamicFontSize = (availableWidthPerTab * 0.7).clamp(10.0, 16.0);
+        final tabCount            = tabs.length;
+        final widthPerTab         = (constraints.maxWidth / tabCount) - 24;
+        final dynamicFontSize     = (widthPerTab * 0.7).clamp(10.0, 16.0);
 
         return Container(
           color: AppColors.primaryColor,
           child: Row(
-            children: List.generate(
-              tabs.length,
-                  (index) {
-                final isActive = selectedIndex == index;
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => onTabTap(index),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: isActive ? Colors.red : AppColors.greyColor,
-                            width: 3,
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        tabs[index],
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: dynamicFontSize,
-                          fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                          color: isActive ? Colors.white : Colors.grey[400],
+            children: List.generate(tabs.length, (index) {
+              final isActive = selectedIndex == index;
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onTabTap(index),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: isActive ? Colors.red : AppColors.greyColor,
+                          width: 3,
                         ),
                       ),
                     ),
+                    child: Text(
+                      tabs[index],
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: dynamicFontSize,
+                        fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                        color: isActive ? Colors.white : Colors.grey[400],
+                      ),
+                    ),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            }),
           ),
         );
       },
     );
   }
+}
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Shared movie data model
+// ─────────────────────────────────────────────────────────────────────────────
 
+class _MovieItem {
+  final String title;
+  final String meta;       // e.g. "Movie • 2018 • 2hr 30min"
+  final double rating;
+  final String image;
+
+  const _MovieItem({
+    required this.title,
+    required this.meta,
+    required this.rating,
+    required this.image,
+  });
+}
+
+// Sample data shared across tabs
+const List<_MovieItem> _demoMovies = [
+  _MovieItem(
+    title: 'Spider-Man: Across the Spider-Verse',
+    meta:  'Movie • 2018 • 2hr 30min',
+    rating: 8.5,
+    image: 'assets/images/movie_poster2.png',
+  ),
+  _MovieItem(
+    title: 'Spider-Man: Across the Spider-Verse',
+    meta:  'Movie • 2018 • 2hr 30min',
+    rating: 8.5,
+    image: 'assets/images/movie_poster2.png',
+  ),
+  _MovieItem(
+    title: 'Spider-Man: Across the Spider-Verse',
+    meta:  'Movie • 2018 • 2hr 30min',
+    rating: 8.5,
+    image: 'assets/images/movie_poster2.png',
+  ),
+  _MovieItem(
+    title: 'Spider-Man: Across the Spider-Verse',
+    meta:  'Movie • 2018 • 2hr 30min',
+    rating: 8.5,
+    image: 'assets/images/movie_poster2.png',
+  ),
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Shared list-card widget
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _MovieListCard extends StatelessWidget {
+  final _MovieItem movie;
+  final List<Widget> actions; // buttons shown on the bottom-left
+
+  const _MovieListCard({
+    required this.movie,
+    required this.actions,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Poster
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              movie.image,
+              width: 70,
+              height: 90,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // Info + actions
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(Icons.pets, size: 13, color: Colors.orange),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${movie.rating}  •  ${movie.meta}',
+                      style: TextStyle(fontSize: 11, color: Colors.grey[400]),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                if (actions.isNotEmpty)
+                  Row(children: actions),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Small circular action button
+Widget _circleBtn({
+  required IconData icon,
+  required Color iconColor,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      width: 30,
+      height: 30,
+      margin: const EdgeInsets.only(right: 8),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withOpacity(0.08),
+        border: Border.all(color: Colors.white24, width: 1),
+      ),
+      child: Icon(icon, size: 15, color: iconColor),
+    ),
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TAB 0 — Repost  (grid, same as original)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class RepostTabContent extends StatelessWidget {
+  const RepostTabContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(8),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
+      itemCount: _demoMovies.length,
+      itemBuilder: (context, index) {
+        final movie = _demoMovies[index];
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.primaryColor,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.asset(
+                        movie.image,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
+                    ),
+                    Positioned(
+                      top: 8, right: 8,
+                      child: const Icon(Icons.close, size: 16, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'When Mel Brooks was preparing for this film, he discovered that Ken Strickfaden preparing for...',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[300]),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 10,
+                          foregroundImage: AssetImage('assets/images/demo_user.jpg'),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            "saved from Tasmia Shabonty's post",
+                            style: TextStyle(fontSize: 10, color: Colors.grey[400]),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TAB 1 — Ratings
+// ─────────────────────────────────────────────────────────────────────────────
+
+class RatingsTabContent extends StatelessWidget {
+  const RatingsTabContent({super.key});
+
+  // Bar chart data: index = rating (1-10), value = count
+  static const List<int> _barData = [1, 0, 1, 0, 2, 1, 3, 4, 2, 1];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ── Stats header ──────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left: total count
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your Total Ratings',
+                      style: TextStyle(fontSize: 13, color: Colors.grey[400]),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      '10',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Right: bar chart
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your Rating Overview',
+                      style: TextStyle(fontSize: 13, color: Colors.grey[400]),
+                    ),
+                    const SizedBox(height: 8),
+                    _RatingBarChart(data: _barData),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Text(
+            'Rated List',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[200],
+            ),
+          ),
+        ),
+
+        // ── Rated list ────────────────────────────────────────────────
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _demoMovies.length,
+          itemBuilder: (context, index) {
+            final movie = _demoMovies[index];
+            return _RatedMovieCard(movie: movie);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _RatingBarChart extends StatelessWidget {
+  final List<int> data; // 10 values for ratings 1-10
+
+  const _RatingBarChart({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final maxVal = data.reduce((a, b) => a > b ? a : b).toDouble();
+    return SizedBox(
+      height: 48,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: List.generate(data.length, (i) {
+          final frac = maxVal > 0 ? data[i] / maxVal : 0.0;
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 1.5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    height: (frac * 36).clamp(3.0, 36.0),
+                    decoration: BoxDecoration(
+                      color: Colors.red[400],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${i + 1}',
+                    style: TextStyle(fontSize: 7, color: Colors.grey[500]),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class _RatedMovieCard extends StatelessWidget {
+  final _MovieItem movie;
+
+  const _RatedMovieCard({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Poster with score badge
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  movie.image,
+                  width: 70,
+                  height: 90,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                bottom: -6,
+                left: 4,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.red[700],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    movie.rating.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  movie.title,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  movie.meta,
+                  style: TextStyle(fontSize: 11, color: Colors.grey[400]),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TAB 2 — Watchlist  (× ✓ ♡)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class WatchlistTabContent extends StatelessWidget {
+  const WatchlistTabContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: _demoMovies.length,
+      itemBuilder: (context, index) {
+        final movie = _demoMovies[index];
+        return _MovieListCard(
+          movie: movie,
+          actions: [
+            _circleBtn(
+              icon: Icons.close,
+              iconColor: Colors.redAccent,
+              onTap: () {},
+            ),
+            _circleBtn(
+              icon: Icons.check,
+              iconColor: Colors.greenAccent,
+              onTap: () {},
+            ),
+            _circleBtn(
+              icon: Icons.favorite_border,
+              iconColor: Colors.pinkAccent,
+              onTap: () {},
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TAB 3 — Favorites  (× only)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class FavoritesTabContent extends StatelessWidget {
+  const FavoritesTabContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: _demoMovies.length,
+      itemBuilder: (context, index) {
+        final movie = _demoMovies[index];
+        return _MovieListCard(
+          movie: movie,
+          actions: [
+            _circleBtn(
+              icon: Icons.close,
+              iconColor: Colors.redAccent,
+              onTap: () {},
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  TAB 4 — Watched  (× ♡)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class WatchedTabContent extends StatelessWidget {
+  const WatchedTabContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 8),
+      itemCount: _demoMovies.length,
+      itemBuilder: (context, index) {
+        final movie = _demoMovies[index];
+        return _MovieListCard(
+          movie: movie,
+          actions: [
+            _circleBtn(
+              icon: Icons.close,
+              iconColor: Colors.redAccent,
+              onTap: () {},
+            ),
+            _circleBtn(
+              icon: Icons.favorite_border,
+              iconColor: Colors.pinkAccent,
+              onTap: () {},
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
