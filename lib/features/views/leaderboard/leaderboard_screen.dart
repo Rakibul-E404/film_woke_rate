@@ -9,8 +9,11 @@ class LeaderboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+
       body: CustomBackground(
         child: SafeArea(
+          bottom: false,
           child: Column(
             children: [
               /// HEADER
@@ -19,7 +22,14 @@ class LeaderboardScreen extends StatelessWidget {
               /// CONTENT
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                  physics: BouncingScrollPhysics(),
+                  // 🔑 DYNAMIC PADDING: Adapts to device + nav height
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 20,
+                    bottom: 12, // ✅ Dynamic value
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -59,18 +69,18 @@ class LeaderboardScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-               SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+                SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
                 const SizedBox(width: 8),
-                 Text(
-                  'UMR LEADERBOARD',
-                  style: AppTextStyle.largeHeadingFranchise
+                Text(
+                    'UMR LEADERBOARD',
+                    style: AppTextStyle.largeHeadingFranchise
                 ),
                 const SizedBox(width: 8),
                 SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
               ],
             ),
           ),
-          const SizedBox(width: 44), // Balance the back button
+          const SizedBox(width: 44),
         ],
       ),
     );
@@ -131,7 +141,6 @@ class LeaderboardScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          /// MOVIE POSTER WITH PLUS ICON
           Stack(
             children: [
               ClipRRect(
@@ -153,7 +162,6 @@ class LeaderboardScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              /// PLUS ICON OVERLAY
               Positioned(
                 top: 0,
                 left: 0,
@@ -171,12 +179,10 @@ class LeaderboardScreen extends StatelessWidget {
 
           const SizedBox(width: 12),
 
-          /// MOVIE INFO
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// RANK BADGE
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
@@ -195,7 +201,6 @@ class LeaderboardScreen extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                /// MOVIE TITLE
                 const Text(
                   'Spider-Man: Across the Spider-Verse',
                   style: TextStyle(
@@ -209,12 +214,11 @@ class LeaderboardScreen extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                /// MOVIE DETAILS
                 Row(
                   children: [
                     SvgPicture.asset(
                       "assets/icons/rate_fill.svg",
-                      height: 20, // REQUIRED: Specify size
+                      height: 20,
                     ),
                     const SizedBox(width: 4),
                     const Text(

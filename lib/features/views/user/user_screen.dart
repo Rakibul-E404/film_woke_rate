@@ -285,7 +285,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       sliver: SliverGrid(
                         delegate: SliverChildBuilderDelegate(
                               (context, index) => _buildGridItem(),
-                          childCount: 6,
+                          childCount: 16,
                         ),
                         gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -299,7 +299,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                     // Bottom padding so last items clear the nav bar
                     const SliverToBoxAdapter(
-                      child: SizedBox(height: 16),
+                      child: SizedBox(height: 100),
                     ),
                   ],
                 ),
@@ -376,28 +376,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    final isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => _onBottomNavTap(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon,
-              color: isSelected ? Colors.white : Colors.grey, size: 24),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? Colors.white : Colors.grey,
             ),
           ),
         ],

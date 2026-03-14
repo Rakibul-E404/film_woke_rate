@@ -1,3 +1,4 @@
+/**
 import 'package:flutter/material.dart';
 import 'package:woke_movie_rating/features/views/home/popular_movies_section.dart';
 import 'package:woke_movie_rating/features/views/home/spotlight_section.dart';
@@ -86,7 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Image.asset(
                       "assets/images/opera_gx_image.png",
-                      height: 200 /*,width: 40,*/,
+                      height: 200 */
+/*,width: 40,*//*
+,
                     ),
                   ),
 
@@ -208,6 +211,242 @@ class _HomeScreenState extends State<HomeScreen> {
                 SpotlightSection(),
 
                 SizedBox(height: 30),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
+
+
+
+
+///
+///
+///
+/// todo:: setting the main bottomnav at top
+///
+///
+///
+
+
+
+
+
+import 'package:flutter/material.dart';
+import 'package:woke_movie_rating/features/views/home/popular_movies_section.dart';
+import 'package:woke_movie_rating/features/views/home/spotlight_section.dart';
+import 'package:woke_movie_rating/features/views/home/top_10_wmr_section.dart';
+import 'package:woke_movie_rating/features/widgets/custom_background.dart';
+import '../../widgets/home_widget/custom_search_bar.dart';
+import 'ad_banner_section.dart';
+import 'hero_section.dart';
+import 'home_app_bar.dart';
+import 'dart:async';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  Timer? _dialogTimer;
+  bool _isDialogOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_isDialogOpen) {
+        _showOperaGXDialog();
+      }
+    });
+    _startDialogTimer();
+  }
+
+  @override
+  void dispose() {
+    _dialogTimer?.cancel();
+    _dialogTimer = null;
+    super.dispose();
+  }
+
+  void _startDialogTimer() {
+    _dialogTimer?.cancel();
+    _dialogTimer = Timer.periodic(const Duration(minutes: 3), (timer) {
+      if (mounted && !_isDialogOpen) {
+        _showOperaGXDialog();
+      }
+    });
+  }
+
+  void _showOperaGXDialog() {
+    if (_isDialogOpen) return;
+    _isDialogOpen = true;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return WillPopScope(
+          onWillPop: () async {
+            _isDialogOpen = false;
+            return true;
+          },
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E1E1E),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.1),
+                  width: 1,
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                    child: Image.asset(
+                      "assets/images/opera_gx_image.png",
+                      height: 200,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _isDialogOpen = false;
+                                  Navigator.of(context).pop();
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: Colors.white,
+                                  side: BorderSide(
+                                    color: Colors.white.withOpacity(0.3),
+                                  ),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Text('Close'),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _isDialogOpen = false;
+                                  Navigator.of(context).pop();
+                                  print('Continue button pressed');
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFE50914),
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: const Text('Continue'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ).then((_) {
+      _isDialogOpen = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return CustomBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+
+        // 🔑 CHANGE #1: Allow body to extend behind BottomNavigationBar
+        extendBody: true,
+
+        /// 🔥 APP BAR
+        appBar: const HomeAppBar(),
+
+        /// 🔥 BODY
+        body: SafeArea(
+          // 🔑 CHANGE #2: Allow content to extend behind bottom nav
+          bottom: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            // 🔑 CHANGE #3: Dynamic minimal padding (no wasted space!)
+            padding: EdgeInsets.only(
+              bottom: 50, // ✅ Adapts to device + tiny buffer
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// 🔥 Ad Banner
+                AdBannerSection(),
+
+                const SizedBox(height: 18),
+
+                /// 🔎 Search Bar
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: CustomSearchBar(),
+                ),
+
+                const SizedBox(height: 20),
+
+                /// 🎬 Hero Section
+                const HeroSection(),
+
+                const SizedBox(height: 20),
+
+                /// ⭐ Popular Movies
+                const PopularMoviesSection(),
+
+                const SizedBox(height: 30),
+
+                /// ⭐ TOP 10 WMR LIST
+                const Top10WmrSection(),
+
+                const SizedBox(height: 20),
+
+                /// ✨ In the Spotlight
+                const SpotlightSection(),
+
+                const SizedBox(height: 30),
               ],
             ),
           ),
