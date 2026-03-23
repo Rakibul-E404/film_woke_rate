@@ -6,6 +6,7 @@ import 'package:woke_movie_rating/features/views/self_user/tab_bar/self_watched_
 import 'package:woke_movie_rating/features/views/self_user/tab_bar/self_watchlist_tab_content.dart';
 import '../../widgets/custom_background.dart';
 import '../../widgets/self_user_screen_widget/self_profile_tab_bar.dart';
+import '../users/followers_following.dart';
 
 class SelfUserProfileScreen extends StatefulWidget {
   const SelfUserProfileScreen({super.key});
@@ -16,13 +17,16 @@ class SelfUserProfileScreen extends StatefulWidget {
 
 class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
     with SingleTickerProviderStateMixin {
-
-  static const double _coverHeight   = 200.0;
-  static const double _avatarRadius  = 40.0;
+  static const double _coverHeight = 200.0;
+  static const double _avatarRadius = 40.0;
   static const double _avatarOverlap = 24.0;
 
   final List<String> _tabs = [
-    'Repost', 'Ratings', 'Watchlist', 'Favorites', 'Watched',
+    'Repost',
+    'Ratings',
+    'Watchlist',
+    'Favorites',
+    'Watched',
   ];
 
   late final TabController _tabController;
@@ -44,12 +48,18 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
   // ── Tab content ──────────────────────────────────────────────────────────
   Widget _tabContent(int index) {
     switch (index) {
-      case 0:  return const SelfRepostTabContent();
-      case 1:  return const SelfRatingsTabContent();
-      case 2:  return const SelfWatchlistTabContent();
-      case 3:  return const SelfFavoritesTabContent();
-      case 4:  return const SelfWatchedTabContent();
-      default: return const SizedBox.shrink();
+      case 0:
+        return const SelfRepostTabContent();
+      case 1:
+        return const SelfRatingsTabContent();
+      case 2:
+        return const SelfWatchlistTabContent();
+      case 3:
+        return const SelfFavoritesTabContent();
+      case 4:
+        return const SelfWatchedTabContent();
+      default:
+        return const SizedBox.shrink();
     }
   }
 
@@ -64,15 +74,43 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
           //    the tab bar stays pinned, regardless of which tab is active.
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
-
               // ── Cover + Avatar ────────────────────────────────────────
               _buildProfileAppBar(),
 
-              // ── Name + follower stats ─────────────────────────────────
+              /// // ── Name + follower stats ─────────────────────────────────
+              /// SliverToBoxAdapter(
+              ///   child: Padding(
+              ///     padding: EdgeInsets.fromLTRB(
+              ///         16, _avatarRadius + 12, 16, 8),
+              ///     child: Column(
+              ///       crossAxisAlignment: CrossAxisAlignment.start,
+              ///       children: [
+              ///         const Text(
+              ///           'Tasmiashabu',
+              ///           style: TextStyle(
+              ///             fontSize: 24,
+              ///             fontWeight: FontWeight.bold,
+              ///             color: Colors.white,
+              ///           ),
+              ///         ),
+              ///         const SizedBox(height: 4),
+              ///         Text(
+              ///           '50 Followers · 102 Following',
+              ///           style: TextStyle(
+              ///               fontSize: 14, color: Colors.grey[300]),
+              ///         ),
+              ///       ],
+              ///     ),
+              ///   ),
+              /// ),
+
+              // Add this import at the top
+
+              // Update the followers/following text to be tappable
+              // Find this section in your build method and replace it:
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      16, _avatarRadius + 12, 16, 8),
+                  padding: EdgeInsets.fromLTRB(16, _avatarRadius + 12, 16, 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -85,10 +123,29 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        '50 Followers · 102 Following',
-                        style: TextStyle(
-                            fontSize: 14, color: Colors.grey[300]),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const FollowersFollowingScreen(
+                                    username: 'Tasmiashabu',
+                                    followersCount: 50,
+                                    followingCount: 102,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          '50 Followers · 102 Following',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[300],
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.grey[500],
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -113,13 +170,10 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
               controller: _tabController,
               children: List.generate(
                 _tabs.length,
-                    (i) => SingleChildScrollView(
+                (i) => SingleChildScrollView(
                   // Each tab scrolls independently inside the NestedScrollView
                   child: Column(
-                    children: [
-                      _tabContent(i),
-                      const SizedBox(height: 100),
-                    ],
+                    children: [_tabContent(i), const SizedBox(height: 100)],
                   ),
                 ),
               ),
@@ -152,7 +206,9 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
             ),
             // Top gradient
             Positioned(
-              top: 0, left: 0, right: 0,
+              top: 0,
+              left: 0,
+              right: 0,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
@@ -169,7 +225,9 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
             ),
             // Bottom gradient
             Positioned(
-              bottom: 0, left: 0, right: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
               child: Container(
                 height: 80,
                 decoration: BoxDecoration(
@@ -186,7 +244,8 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
             ),
             // Back button
             Positioned(
-              top: 8, left: 4,
+              top: 8,
+              left: 4,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () => Navigator.pop(context),
@@ -194,12 +253,15 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
             ),
             // Notification + more
             Positioned(
-              top: 8, right: 4,
+              top: 8,
+              right: 4,
               child: Row(
                 children: [
                   IconButton(
                     icon: const Icon(
-                        Icons.notifications_outlined, color: Colors.white),
+                      Icons.notifications_outlined,
+                      color: Colors.white,
+                    ),
                     onPressed: () {},
                   ),
                   IconButton(
@@ -220,8 +282,11 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
                 ),
-                child: const Icon(Icons.camera_alt,
-                    size: 14, color: Colors.white),
+                child: const Icon(
+                  Icons.camera_alt,
+                  size: 14,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
@@ -255,14 +320,16 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                     ),
                     child: CircleAvatar(
                       radius: _avatarRadius,
-                      backgroundImage:
-                      const AssetImage('assets/images/demo_user.jpg'),
+                      backgroundImage: const AssetImage(
+                        'assets/images/demo_user.jpg',
+                      ),
                       backgroundColor: Colors.grey[300],
                     ),
                   ),
                   // Small camera badge
                   Positioned(
-                    bottom: 2, right: 2,
+                    bottom: 2,
+                    right: 2,
                     child: Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
@@ -270,8 +337,11 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 1.5),
                       ),
-                      child: const Icon(Icons.camera_alt,
-                          size: 12, color: Colors.white),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        size: 12,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -283,9 +353,3 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
     );
   }
 }
-
-
-
-
-
-
