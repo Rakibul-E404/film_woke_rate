@@ -7,7 +7,7 @@ import 'package:woke_movie_rating/features/views/home/home_screen.dart';
 import '../../utils/app_colors.dart';
 import '../community/community_screen.dart';
 import '../leaderboard/leaderboard_screen.dart';
-import '../user/user_screen.dart';
+import '../self_user/self_user_screen.dart';
 
 class MainBottomNav extends StatefulWidget {
   const MainBottomNav({super.key});
@@ -49,7 +49,7 @@ class _MainBottomNavState extends State<MainBottomNav>
     const HomeScreen(),
     const LeaderboardScreen(),
     const CommunityScreen(),
-    const UserProfileScreen(),
+    const SelfUserProfileScreen(),
   ];
 
   final List<Map<String, dynamic>> _navItems = [
