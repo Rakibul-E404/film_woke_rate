@@ -542,7 +542,7 @@ class CommunityScreen extends StatelessWidget {
                               /// ACTIONS
                               Row(
                                 children: [
-                                  const Icon(CupertinoIcons.arrow_up,
+                                  const Icon(CupertinoIcons.capslock,
                                       color: Colors.white70),
                                   const SizedBox(width: 4),
                                   Text("${index + 1}k",
