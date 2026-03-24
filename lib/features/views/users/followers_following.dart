@@ -1,6 +1,8 @@
-// File: lib/features/views/followers_following/followers_following_screen.dart
 
 import 'package:flutter/material.dart';
+import '../../utils/app_colors.dart';
+import '../../utils/app_text_styles.dart';
+import '../../widgets/custom_background.dart';
 
 class FollowersFollowingScreen extends StatefulWidget {
   final String username;
@@ -21,9 +23,8 @@ class FollowersFollowingScreen extends StatefulWidget {
 class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int _selectedIndex = 0; // 0 for Followers, 1 for Following
+  int _selectedIndex = 0;
 
-  // Sample data - Replace with your actual data source
   final List<Map<String, dynamic>> _followers = [
     {'name': 'Miranda baju', 'username': '@miris', 'isFollowing': false, 'followsYou': true},
     {'name': 'Miranda baju', 'username': '@miris', 'isFollowing': true, 'followsYou': true},
@@ -78,9 +79,6 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
     setState(() {
       if (isFollowersTab) {
         _followers[index]['isFollowing'] = !_followers[index]['isFollowing'];
-      } else {
-        // For following tab, you might want to unfollow
-        // _following[index]['isFollowing'] = !_following[index]['isFollowing'];
       }
     });
   }
@@ -94,22 +92,23 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1a2a3a),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(),
-            _buildTabBar(),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildFollowersTab(),
-                  _buildFollowingTab(),
-                ],
+      body: CustomBackground(
+        child: SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(),
+              _buildTabBar(),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildFollowersTab(),
+                    _buildFollowingTab(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -124,16 +123,11 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
-              'TASMIASHABU',
+              widget.username.toUpperCase(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
+              style: AppTextStyle.largeHeadingFranchise,
             ),
           ),
           IconButton(
@@ -151,54 +145,68 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
 
   Widget _buildTabBar() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2a3a4a),
-        borderRadius: BorderRadius.circular(8),
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           Expanded(
             child: GestureDetector(
               onTap: () => _tabController.animateTo(0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: _selectedIndex == 0
-                      ? const Color(0xFFe94560)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${widget.followersCount} Followers',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: _selectedIndex == 0 ? Colors.white : Colors.grey[400],
-                    fontWeight: FontWeight.w600,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      '${widget.followersCount} Followers',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
+                  Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == 0
+                          ? const Color(0xFFe94560)
+                          : const Color(0xff05080b),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
             child: GestureDetector(
               onTap: () => _tabController.animateTo(1),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: _selectedIndex == 1
-                      ? const Color(0xFFe94560)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  '${widget.followingCount} Following',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: _selectedIndex == 1 ? Colors.white : Colors.grey[400],
-                    fontWeight: FontWeight.w600,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      '${widget.followingCount} Following',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
+                  Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == 1
+                          ? const Color(0xFFe94560)
+                          : const Color(0xff05080b),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -210,7 +218,7 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
   Widget _buildFollowersTab() {
     return Column(
       children: [
-        _buildSearchBar(),
+        CustomSearchBarTwo(),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -248,13 +256,12 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
   Widget _buildFollowingTab() {
     return Column(
       children: [
-        _buildSearchBar(),
+        CustomSearchBarTwo(),
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Suggestions Section
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
@@ -277,8 +284,6 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
                     onTap: () => _followSuggestion(index),
                   ),
                 ),
-
-                // All Followers Section
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
                   child: Text(
@@ -305,33 +310,6 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFF2a3a4a),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.search, color: Colors.grey[400]),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: TextStyle(color: Colors.grey[400]),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -419,6 +397,64 @@ class _FollowersFollowingScreenState extends State<FollowersFollowingScreen>
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomSearchBarTwo extends StatelessWidget {
+  final bool isTappable;
+  final bool isEditable;
+  final VoidCallback? onTap;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
+  final VoidCallback? onEditingComplete;
+
+  const CustomSearchBarTwo({
+    super.key,
+    this.isTappable = true,
+    this.isEditable = true,
+    this.onTap,
+    this.controller,
+    this.focusNode,
+    this.textInputAction,
+    this.onSubmitted,
+    this.onEditingComplete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Container(
+        height: 55,
+        decoration: BoxDecoration(
+          color: const Color(0xFF0e1c28),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: TextField(
+          controller: controller,
+          enabled: isEditable,
+          style: const TextStyle(color: Colors.white),
+          cursorColor: AppColors.whiteColor,
+          textInputAction: textInputAction,
+          onSubmitted: onSubmitted,
+          onEditingComplete: onEditingComplete,
+          decoration: InputDecoration(
+            hintText: "Search",
+            hintStyle: AppTextStyle.defaultTextStyle.copyWith(
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+            prefixIcon: const Icon(
+              Icons.search,
+              color: Colors.white70,
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 15),
+          ),
+        ),
       ),
     );
   }
