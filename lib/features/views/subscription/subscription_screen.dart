@@ -4,12 +4,18 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import '../../utils/app_text_styles.dart';
 import '../../widgets/custom_background.dart';
 
-class SubscriptionScreen extends StatelessWidget {
+class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
 
   @override
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+}
+
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1a2f4a),
       body: CustomBackground(
         child: SafeArea(
           child: Column(
@@ -25,81 +31,63 @@ class SubscriptionScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: 40),
-                      // Subscription Title
-                      Text(
-                        'SUBSCRIPTION',
-                        style: AppTextStyle.largeHeadingFranchise?.copyWith(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                        ),
-                      ),
-                      const SizedBox(height: 40),
                       // Price Card
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              const Color(0xFFe94560).withValues(alpha: 0.2),
-                              const Color(0xFFe94560).withValues(alpha: 0.05),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(20),
+                          color: const Color(0xFF1a2f4a),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: const Color(0xFFe94560).withValues(alpha: 0.3),
+                            color: Colors.white.withOpacity(0.1),
                             width: 1,
                           ),
                         ),
                         child: Column(
                           children: [
-                            Text(
-                              '\$9.99',
-                              style: AppTextStyle.largeHeadingFranchise?.copyWith(
-                                fontSize: 48,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFFe94560),
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  '\$9.99',
+                                  style: AppTextStyle.defaultTextStyle?.copyWith(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: Text(
+                                    '/year',
+                                    style: AppTextStyle.defaultTextStyle?.copyWith(
+                                      fontSize: 16,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '/year',
-                              style: AppTextStyle.defaultTextStyle?.copyWith(
-                                fontSize: 18,
-                                color: Colors.grey[400],
-                              ),
-                            ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 8),
                             Text(
                               'for better experience',
                               style: AppTextStyle.defaultTextStyle?.copyWith(
-                                fontSize: 16,
-                                color: Colors.white70,
+                                fontSize: 14,
+                                color: Colors.grey[400],
                               ),
                             ),
                             const SizedBox(height: 24),
                             // Get Started Button
                             Container(
                               width: double.infinity,
-                              height: 52,
+                              height: 50,
                               decoration: BoxDecoration(
-                                color: const Color(0xFFe94560),
+                                color: const Color(0xFFd84315),
                                 borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFFe94560).withValues(alpha: 0.3),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
                               ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
                                   onTap: () {
-                                    // Handle subscription purchase
                                     _showSubscriptionDialog(context);
                                   },
                                   borderRadius: BorderRadius.circular(12),
@@ -109,69 +97,32 @@ class SubscriptionScreen extends StatelessWidget {
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40),
-                      // Features List
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF0D1F33),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Premium Benefits',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            SizedBox(
+                              height: 20,
                             ),
-                            const SizedBox(height: 20),
-                            _buildFeatureItem(
-                              'No ads at all',
-                              Icons.check_circle,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildFeatureItem(
-                              'No popups',
-                              Icons.check_circle,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildFeatureItem(
-                              'No full-screen ads',
-                              Icons.check_circle,
-                            ),
-                            const SizedBox(height: 16),
-                            _buildFeatureItem(
-                              'Exclusive features',
-                              Icons.star,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildFeatureItem('No ads at all'),
+                                const SizedBox(height: 16),
+                                _buildFeatureItem('No popups'),
+                                const SizedBox(height: 16),
+                                _buildFeatureItem('No full-screen ads'),
+                                const SizedBox(height: 16),
+                                _buildFeatureItem('Exclusive features'),
+                              ],
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 40),
-                      // Additional Info
-                      Text(
-                        'Cancel anytime • No hidden fees',
-                        style: AppTextStyle.smallText?.copyWith(
-                          color: Colors.grey[500],
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -192,31 +143,38 @@ class SubscriptionScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Get.back(),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
               'SUBSCRIPTION',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
+              style: AppTextStyle.largeHeadingFranchise?.copyWith(
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 1,
+                letterSpacing: 2,
               ),
             ),
           ),
-          const SizedBox(width: 48), // Balance the back button
+          const SizedBox(width: 48),
         ],
       ),
     );
   }
 
-  Widget _buildFeatureItem(String text, IconData icon) {
+  Widget _buildFeatureItem(String text) {
     return Row(
       children: [
-        Icon(
-          icon,
-          color: const Color(0xFFe94560),
-          size: 22,
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            color: const Color(0xFF2a3f5f),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: const Icon(
+            Icons.check,
+            size: 14,
+            color: Colors.white,
+          ),
         ),
         const SizedBox(width: 12),
         Expanded(
@@ -225,7 +183,7 @@ class SubscriptionScreen extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
@@ -236,7 +194,7 @@ class SubscriptionScreen extends StatelessWidget {
   void _showSubscriptionDialog(BuildContext context) {
     Get.dialog(
       AlertDialog(
-        backgroundColor: const Color(0xFF0D1F33),
+        backgroundColor: const Color(0xFF1a2f4a),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: const Text(
           'Subscribe Now',
@@ -254,15 +212,15 @@ class SubscriptionScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFe94560).withValues(alpha: 0.1),
+                color: const Color(0xFFd84315).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: const Color(0xFFe94560).withValues(alpha: 0.3),
+                  color: const Color(0xFFd84315).withOpacity(0.3),
                 ),
               ),
               child: const Row(
                 children: [
-                  Icon(Icons.check_circle, color: Color(0xFFe94560), size: 20),
+                  Icon(Icons.check_circle, color: Color(0xFFd84315), size: 20),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -286,11 +244,10 @@ class SubscriptionScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              // Add subscription purchase logic here
               _showSuccessDialog(context);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFe94560),
+              backgroundColor: const Color(0xFFd84315),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -305,7 +262,7 @@ class SubscriptionScreen extends StatelessWidget {
   void _showSuccessDialog(BuildContext context) {
     Get.dialog(
       AlertDialog(
-        backgroundColor: const Color(0xFF0D1F33),
+        backgroundColor: const Color(0xFF1a2f4a),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         title: const Text(
           'Success!',
@@ -319,10 +276,10 @@ class SubscriptionScreen extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               Get.back();
-              Get.back(); // Go back to profile screen
+              Get.back();
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFe94560),
+              backgroundColor: const Color(0xFFd84315),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

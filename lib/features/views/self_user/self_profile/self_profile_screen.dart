@@ -529,7 +529,7 @@ class SelfProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
                             _buildMenuItem(
-                              svgIcon: "assets/icons/premium_icon.svg",
+                              svgIcon: "assets/icons/crown.svg",
                               title: 'Subscription',
                               onTap: () {
                                 Get.to(() => const SubscriptionScreen());
