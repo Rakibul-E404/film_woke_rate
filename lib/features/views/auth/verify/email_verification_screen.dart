@@ -4,7 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:pinput/pinput.dart';
 import 'package:woke_movie_rating/features/utils/app_colors.dart';
 import 'package:woke_movie_rating/features/utils/app_text_styles.dart';
-import 'package:woke_movie_rating/features/views/auth/forgot_password/forgot_password_screen.dart';
+import 'package:woke_movie_rating/features/views/auth/password/forgot_password_screen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});

@@ -4,7 +4,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:pinput/pinput.dart';
 import 'package:woke_movie_rating/features/utils/app_colors.dart';
 import 'package:woke_movie_rating/features/utils/app_text_styles.dart';
-import 'package:woke_movie_rating/features/views/auth/reset_password/reset_password_screen.dart';
+import 'package:woke_movie_rating/features/views/auth/password/reset_password_screen.dart';
 
 /// The main container for all onboard pages
 class ForgotPasswordScreen extends StatefulWidget {

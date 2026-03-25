@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:woke_movie_rating/features/views/auth/password/change_password_screen.dart';
 import 'package:woke_movie_rating/features/views/self_user/self_profile/edit_self_profile_screen.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_text_styles.dart';
@@ -98,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                               title: 'Change Password',
                               onTap: () {
                                 // Navigate to User Profile
-                                Get.to(() => const EditSelfProfileScreen());
+                                Get.to(() => const ChangePasswordScreen());
                               },
                             ),
                             const SizedBox(height: 12),
