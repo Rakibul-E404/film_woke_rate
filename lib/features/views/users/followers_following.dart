@@ -11,7 +11,7 @@ class FollowersFollowingScreen extends StatefulWidget {
 
   const FollowersFollowingScreen({
     super.key,
-    this.username = 'Tasmiashabu',
+    this.username = 'Rakibul',
     this.followersCount = 50,
     this.followingCount = 102,
   });

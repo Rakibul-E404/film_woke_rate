@@ -86,7 +86,7 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
               ///       crossAxisAlignment: CrossAxisAlignment.start,
               ///       children: [
               ///         const Text(
-              ///           'Tasmiashabu',
+              ///           'Rakibul',
               ///           style: TextStyle(
               ///             fontSize: 24,
               ///             fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Tasmiashabu',
+                        'Rakibul',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _SelfUserProfileScreenState extends State<SelfUserProfileScreen>
                             MaterialPageRoute(
                               builder: (context) =>
                                   const FollowersFollowingScreen(
-                                    username: 'Tasmiashabu',
+                                    username: 'Rakibul',
                                     followersCount: 50,
                                     followingCount: 102,
                                   ),
