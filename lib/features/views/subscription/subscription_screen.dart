@@ -40,7 +40,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           color: const Color(0xFF1a2f4a),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.white.withAlpha(1),
+                            color: Colors.white.withValues(alpha: 0.1),
                             width: 1,
                           ),
                         ),
@@ -97,10 +97,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                     _showSubscriptionDialog(context);
                                   },
                                   borderRadius: BorderRadius.circular(12),
-                                  child:  Center(
+                                  child: const Center(
                                     child: Text(
                                       'Get Started',
-                                      style: AppTextStyle.defaultTextStyle,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -145,22 +149,31 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Get.back(),
           ),
-          Row(
-            children: [
-              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
-              Expanded(
-                child: Text(
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  "assets/icons/star_with_background_shade.svg",
+                  height: 20,
+                  width: 20,
+                ),
+                Text(
                   'SUBSCRIPTION',
                   textAlign: TextAlign.center,
-                  style: AppTextStyle.largeHeadingFranchise?.copyWith(
+                  style: AppTextStyle.largeHeadingFranchise.copyWith(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2,
                   ),
                 ),
-              ),
-              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
-            ],
+                SvgPicture.asset(
+                  "assets/icons/star_with_background_shade.svg",
+                  height: 20,
+                  width: 20,
+                ),
+              ],
+            ),
           ),
           const SizedBox(width: 48),
         ],
@@ -220,10 +233,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFd84315).withOpacity(0.1),
+                color: const Color(0xFFd84315).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: const Color(0xFFd84315).withOpacity(0.3),
+                  color: const Color(0xFFd84315).withValues(alpha: 0.3),
                 ),
               ),
               child: const Row(

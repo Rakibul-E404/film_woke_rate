@@ -17,8 +17,8 @@ class _EditSelfProfileScreenState extends State<EditSelfProfileScreen> {
   bool _isEditing = false;
 
   // Controllers for text fields
-  final TextEditingController _usernameController = TextEditingController(text: 'Tasushabu');
-  final TextEditingController _emailController = TextEditingController(text: 'tasmio@gmail.com');
+  final TextEditingController _usernameController = TextEditingController(text: 'Rakibul');
+  final TextEditingController _emailController = TextEditingController(text: 'rakib@gmail.com');
   final TextEditingController _phoneController = TextEditingController(text: '+8801629256947');
 
   // Focus nodes for keyboard handling

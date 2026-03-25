@@ -3,14 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:woke_movie_rating/features/views/self_user/self_profile/edit_self_profile_screen.dart';
-import '../../../utils/app_colors.dart';
-import '../../../utils/app_text_styles.dart';
-import '../../../widgets/custom_background.dart';
-import '../../settings/settings_screen.dart';
-import '../../subscription/subscription_screen.dart';
+import '../../utils/app_colors.dart';
+import '../../utils/app_text_styles.dart';
+import '../../widgets/custom_background.dart';
 
-class SelfProfileScreen extends StatelessWidget {
-  const SelfProfileScreen({super.key});
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,137 +29,64 @@ class SelfProfileScreen extends StatelessWidget {
                         children: [
                           // Background Image Container
                           Container(
-                            height: 200,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/demo_profile_cover.png',
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 12,
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () => Get.back(),
                                 ),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                            ),
-                          ),
-                          // Header Overlay on Cover Photo
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () => Get.back(),
-                                  ),
-                                  const SizedBox(width: 25),
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/star_with_background_shade.svg",
-                                          height: 20,
-                                          width: 20,
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          'VIEW PROFILE',
-                                          textAlign: TextAlign.center,
-                                          style: AppTextStyle
-                                              .largeHeadingFranchise
-                                              ?.copyWith(
-                                                fontSize: 28,
-                                                fontWeight: FontWeight.bold,
-                                                shadows: [
-                                                  Shadow(
-                                                    color: Colors.black
-                                                        .withValues(alpha: 0.5),
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        SvgPicture.asset(
-                                          "assets/icons/star_with_background_shade.svg",
-                                          height: 20,
-                                          width: 20,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 48),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // Profile Picture - Positioned to overlap half
-                          Positioned(
-                            bottom: -60,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: Container(
-                                width: 120,
-                                height: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.primaryColor,
-                                    width: 4,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(
-                                        alpha: 0.3,
+                                const SizedBox(width: 25),
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icons/star_with_background_shade.svg",
+                                        height: 20,
+                                        width: 20,
                                       ),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: const CircleAvatar(
-                                  radius: 58,
-                                  backgroundImage: AssetImage(
-                                    'assets/images/demo_user.jpg',
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'VIEW PROFILE',
+                                        textAlign: TextAlign.center,
+                                        style: AppTextStyle
+                                            .largeHeadingFranchise
+                                            ?.copyWith(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold,
+                                          shadows: [
+                                            Shadow(
+                                              color: Colors.black
+                                                  .withValues(alpha: 0.5),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      SvgPicture.asset(
+                                        "assets/icons/star_with_background_shade.svg",
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          // Username - Positioned below the profile picture
-                          Positioned(
-                            bottom: -120,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: Text(
-                                'Rakibul',
-                                style: AppTextStyle.smallText.copyWith(
-                                  fontSize: 24,
-                                  color: AppColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                                const SizedBox(width: 48),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 140),
                       // Menu Items
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -180,7 +105,7 @@ class SelfProfileScreen extends StatelessWidget {
                               icon: Icons.tune,
                               title: 'Settings',
                               onTap: () {
-                                 Get.to(() => const SettingsScreen());
+                                /// Get.to(() => const SettingsScreen());
                               },
                             ),
                             const SizedBox(height: 12),
@@ -188,7 +113,7 @@ class SelfProfileScreen extends StatelessWidget {
                               svgIcon: "assets/icons/crown.svg",
                               title: 'Subscription',
                               onTap: () {
-                                Get.to(() => const SubscriptionScreen());
+                                /// Get.to(() => const SubscriptionScreen());
                               },
                             ),
                           ],
