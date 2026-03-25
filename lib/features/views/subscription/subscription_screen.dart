@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import '../../utils/app_text_styles.dart';
@@ -39,7 +40,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           color: const Color(0xFF1a2f4a),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withAlpha(1),
                             width: 1,
                           ),
                         ),
@@ -49,7 +50,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               children: [
                                 Text(
                                   '\$9.99',
-                                  style: AppTextStyle.defaultTextStyle?.copyWith(
+                                  style: AppTextStyle.defaultTextStyle.copyWith(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -59,7 +60,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   padding: const EdgeInsets.only(top: 8),
                                   child: Text(
                                     '/year',
-                                    style: AppTextStyle.defaultTextStyle?.copyWith(
+                                    style: AppTextStyle.defaultTextStyle.copyWith(
                                       fontSize: 16,
                                       color: Colors.grey[400],
                                     ),
@@ -68,12 +69,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               ],
                             ),
                             const SizedBox(height: 8),
-                            Text(
-                              'for better experience',
-                              style: AppTextStyle.defaultTextStyle?.copyWith(
-                                fontSize: 14,
-                                color: Colors.grey[400],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'for better experience',
+                                  style: AppTextStyle.defaultTextStyle.copyWith(
+                                    fontSize: 14,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 24),
                             // Get Started Button
@@ -91,14 +97,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                     _showSubscriptionDialog(context);
                                   },
                                   borderRadius: BorderRadius.circular(12),
-                                  child: const Center(
+                                  child:  Center(
                                     child: Text(
                                       'Get Started',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      style: AppTextStyle.defaultTextStyle,
                                     ),
                                   ),
                                 ),
@@ -143,16 +145,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Get.back(),
           ),
-          Expanded(
-            child: Text(
-              'SUBSCRIPTION',
-              textAlign: TextAlign.center,
-              style: AppTextStyle.largeHeadingFranchise?.copyWith(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
+          Row(
+            children: [
+              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+              Expanded(
+                child: Text(
+                  'SUBSCRIPTION',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.largeHeadingFranchise?.copyWith(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
+                ),
               ),
-            ),
+              SvgPicture.asset("assets/icons/star_with_background_shade.svg"),
+            ],
           ),
           const SizedBox(width: 48),
         ],
