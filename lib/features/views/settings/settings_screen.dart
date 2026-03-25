@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -55,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                        'VIEW PROFILE',
+                                        'Settings',
                                         textAlign: TextAlign.center,
                                         style: AppTextStyle
                                             .largeHeadingFranchise
@@ -93,8 +94,8 @@ class SettingsScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             _buildMenuItem(
-                              icon: Icons.person_outline,
-                              title: 'User Profile',
+                              icon: Icons.lock,
+                              title: 'Change Password',
                               onTap: () {
                                 // Navigate to User Profile
                                 Get.to(() => const EditSelfProfileScreen());
@@ -102,20 +103,71 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 12),
                             _buildMenuItem(
-                              icon: Icons.tune,
-                              title: 'Settings',
+                              icon: Icons.bookmark,
+                              title: 'Saved Post',
                               onTap: () {
                                 /// Get.to(() => const SettingsScreen());
                               },
                             ),
                             const SizedBox(height: 12),
                             _buildMenuItem(
-                              svgIcon: "assets/icons/crown.svg",
-                              title: 'Subscription',
+                              icon: Icons.notifications_active,
+                              title: 'Notifications',
                               onTap: () {
-                                /// Get.to(() => const SubscriptionScreen());
+                                /// Get.to(() => const SettingsScreen());
                               },
                             ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              icon: Icons.shopping_bag,
+                              title: 'Sharing',
+                              onTap: () {
+                                /// Get.to(() => const SettingsScreen());
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              icon: CupertinoIcons.doc_text_fill,
+                              title: 'Terms and Conditions',
+                              onTap: () {
+                                /// Get.to(() => const SettingsScreen());
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              icon: CupertinoIcons.checkmark_shield_fill,
+                              title: 'Privacy Policy',
+                              onTap: () {
+                                /// Get.to(() => const SettingsScreen());
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              icon: Icons.report_problem,
+                              title: 'Report a problem',
+                              onTap: () {
+                                /// Get.to(() => const SettingsScreen());
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              icon: Icons.help,
+                              title: 'FAQ',
+                              onTap: () {
+                                /// Get.to(() => const SettingsScreen());
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                            // _buildMenuItem(
+                            //   icon: Icons.no_accounts,
+                            //   title: 'Delete Account',
+                            //   onTap: () {
+                            //     /// Get.to(() => const SettingsScreen());
+                            //   },
+                            // ),
+                            // const SizedBox(height: 12),
+                            _buildDeleteAccountButton(context),
+                            const SizedBox(height: 12),
                           ],
                         ),
                       ),
@@ -123,11 +175,6 @@ class SettingsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-              // Logout Button - Fixed at bottom
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: _buildLogoutButton(context),
               ),
             ],
           ),
@@ -193,7 +240,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLogoutButton(BuildContext context) {
+  Widget _buildDeleteAccountButton(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 52,
@@ -211,7 +258,9 @@ class SettingsScreen extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () => _showLogoutDialog(context),
+          onTap: () => {
+            ///todo
+          },
           borderRadius: BorderRadius.circular(12),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,10 +269,10 @@ class SettingsScreen extends StatelessWidget {
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   children: [
-                    Icon(Icons.logout, color: Colors.white),
+                    Icon(Icons.no_accounts, color: Colors.white),
                     SizedBox(width: 12),
                     Text(
-                      'Logout',
+                      'Delete Account',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -248,43 +297,4 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: const Color(0xFF0D1F33),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        title: const Text(
-          'Logout',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        content: const Text(
-          'Are you sure you want to logout?',
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white70),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Get.back();
-              // Add your logout logic here
-              Get.offAllNamed('/login');
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFe94560),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text('Logout', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-  }
 }
